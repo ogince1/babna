@@ -243,7 +243,19 @@ export const supabaseHelpers = {
         .order('created_at', { ascending: false });
       
       if (error) {
-        throw error;
+        console.error('❌ Erreur Supabase:', error);
+        // Fallback: essayer sans les filtres
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('properties')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (fallbackError) {
+          throw fallbackError;
+        }
+        
+        console.log('✅ Propriétés récupérées (fallback):', fallbackData?.length || 0, 'propriétés');
+        return fallbackData || [];
       }
       
       console.log('✅ Propriétés récupérées:', data?.length || 0, 'propriétés');
@@ -276,16 +288,32 @@ export const supabaseHelpers = {
   },
 
   async getPropertiesByCity(city: string) {
-    const { data, error } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('city', city)
-      .eq('is_available', true)
-      .eq('is_approved', true)
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('city', city)
+        .eq('is_available', true)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('❌ Erreur getPropertiesByCity:', error);
+        // Fallback: essayer sans les filtres
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('city', city)
+          .order('created_at', { ascending: false });
+        
+        if (fallbackError) throw fallbackError;
+        return fallbackData || [];
+      }
+      
+      return data || [];
+    } catch (error) {
+      console.error('❌ Erreur getPropertiesByCity:', error);
+      return [];
+    }
   },
 
   async getPropertiesByOwner(ownerId: string) {
