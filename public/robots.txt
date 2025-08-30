@@ -1,0 +1,49 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://votre-domaine.com/sitemap.xml
+
+# Pages privées à ne pas indexer
+Disallow: /proprietaire/
+Disallow: /voyageur/
+Disallow: /client/
+Disallow: /mes-reservations
+Disallow: /favoris
+Disallow: /profil
+Disallow: /reserver/
+
+# Fichiers à ne pas indexer
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.png$
+Disallow: /*.jpg$
+Disallow: /*.gif$
+Disallow: /*.svg$
+Disallow: /*.ico$
+
+# Permettre l'indexation des pages publiques
+Allow: /fr/
+Allow: /ar/
+Allow: /en/
+Allow: /es/
+Allow: /fr/appartements
+Allow: /ar/appartements
+Allow: /en/appartements
+Allow: /es/appartements
+Allow: /fr/appartements/ville/
+Allow: /ar/appartements/ville/
+Allow: /en/appartements/ville/
+Allow: /es/appartements/ville/
+Allow: /fr/appartements/type/
+Allow: /ar/appartements/type/
+Allow: /en/appartements/type/
+Allow: /es/appartements/type/
+Allow: /fr/appartements/lieu/
+Allow: /ar/appartements/lieu/
+Allow: /en/appartements/lieu/
+Allow: /es/appartements/lieu/
+Allow: /fr/appartements/tag/
+Allow: /ar/appartements/tag/
+Allow: /en/appartements/tag/
+Allow: /es/appartements/tag/
