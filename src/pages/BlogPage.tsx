@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { contentService } from '../services/contentService';
@@ -8,6 +9,7 @@ import Breadcrumbs from '../components/SEO/Breadcrumbs';
 
 const BlogPage: React.FC = () => {
   const { language } = useApp();
+  const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
