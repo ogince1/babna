@@ -376,14 +376,35 @@ export const supabaseHelpers = {
   },
 
   async createUser(userData: Database['public']['Tables']['users']['Insert']) {
-    const { data, error } = await supabase
-      .from('users')
-      .insert(userData)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .insert(userData)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    } catch (error: any) {
+      console.error('❌ Erreur lors de la création de l\'utilisateur:', error);
+      
+      // Fallback: essayer sans la colonne whatsapp
+      if (error?.message && error.message.includes('whatsapp')) {
+        console.log('🔄 Tentative de création sans la colonne whatsapp...');
+        const { whatsapp, ...userDataWithoutWhatsapp } = userData;
+        
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('users')
+          .insert(userDataWithoutWhatsapp)
+          .select()
+          .single();
+        
+        if (fallbackError) throw fallbackError;
+        return fallbackData;
+      }
+      
+      throw error;
+    }
   },
 
   // Bookings

@@ -127,16 +127,36 @@ export const useSupabaseAuth = () => {
 
       if (data.user) {
         console.log('🔄 Création du profil utilisateur...');
-        // Create user profile
-        await supabaseHelpers.createUser({
-          id: data.user.id,
-          email: data.user.email!,
-          name: userData.name || '',
-          phone: userData.phone || null,
-          whatsapp: userData.whatsapp || null,
-          role: userData.role || 'client',
-        });
-        console.log('✅ Profil utilisateur créé');
+        // Create user profile with fallback for missing columns
+        try {
+          await supabaseHelpers.createUser({
+            id: data.user.id,
+            email: data.user.email!,
+            name: userData.name || '',
+            phone: userData.phone || null,
+            whatsapp: userData.whatsapp || null,
+            role: userData.role || 'client',
+          });
+          console.log('✅ Profil utilisateur créé');
+        } catch (profileError) {
+          console.error('❌ Erreur lors de la création du profil:', profileError);
+          // Fallback: créer le profil sans la colonne whatsapp
+          try {
+            const { error: fallbackError } = await supabase
+              .from('users')
+              .insert({
+                id: data.user.id,
+                email: data.user.email!,
+                name: userData.name || '',
+                phone: userData.phone || null,
+                role: userData.role || 'client',
+              });
+            if (fallbackError) throw fallbackError;
+            console.log('✅ Profil utilisateur créé (fallback)');
+          } catch (fallbackError) {
+            console.error('❌ Erreur lors de la création du profil (fallback):', fallbackError);
+          }
+        }
       }
 
       console.log('✅ Inscription réussie:', data.user?.email);
