@@ -19,6 +19,7 @@ import MyBookingsPage from '../pages/MyBookingsPage';
 import FavoritesPage from '../pages/FavoritesPage';
 import ProfilePage from '../pages/ProfilePage';
 import BlogPage from '../pages/BlogPage';
+import BlogDetailPage from '../pages/BlogDetailPage';
 import TravelGuidePage from '../pages/TravelGuidePage';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -61,6 +62,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
       
       {/* Routes de contenu */}
       <Route path="/blog" element={<BlogPage />} />
+      <Route path="/blog/:postId" element={<BlogDetailPage />} />
       <Route path="/guides" element={<TravelGuidePage />} />
       
       {/* Routes protégées - Propriétaire */}

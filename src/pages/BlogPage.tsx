@@ -210,7 +210,10 @@ const BlogPage: React.FC = () => {
                       </span>
                     </div>
                     
-                    <button className="flex items-center text-orange-600 hover:text-orange-700 font-medium text-sm">
+                    <button 
+                      onClick={() => navigate(`/blog/${post.id}`)}
+                      className="flex items-center text-orange-600 hover:text-orange-700 font-medium text-sm"
+                    >
                       {language === 'ar' ? 'اقرأ المزيد' : 
                        language === 'en' ? 'Read more' : 
                        language === 'es' ? 'Leer más' : 

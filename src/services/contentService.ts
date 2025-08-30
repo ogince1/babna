@@ -116,6 +116,23 @@ export const contentService = {
     }
   },
 
+  async getBlogPostById(id: string): Promise<BlogPost | null> {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('id', id)
+        .eq('is_published', true)
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération de l\'article:', error);
+      return null;
+    }
+  },
+
   // Guides de voyage
   async getTravelGuides(citySlug?: string): Promise<TravelGuide[]> {
     try {
