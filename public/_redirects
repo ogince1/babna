@@ -1,0 +1,20 @@
+# Configuration pour le routage côté client (SPA)
+# Redirige toutes les routes vers index.html sauf les fichiers statiques
+
+# Fichiers statiques
+/assets/* /assets/:splat 200
+/*.js /:splat 200
+/*.css /:splat 200
+/*.ico /:splat 200
+/*.png /:splat 200
+/*.jpg /:splat 200
+/*.jpeg /:splat 200
+/*.gif /:splat 200
+/*.svg /:splat 200
+/*.woff /:splat 200
+/*.woff2 /:splat 200
+/*.ttf /:splat 200
+/*.eot /:splat 200
+
+# Toutes les autres routes vers index.html
+/* /index.html 200

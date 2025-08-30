@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Routes, Route } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import MultilingualRoutes from '../../routes/MultilingualRoutes';
@@ -11,6 +11,7 @@ const LanguageRouter: React.FC<LanguageRouterProps> = ({ onPropertySelect }) => 
   const { language, setLanguage } = useApp();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -19,17 +20,30 @@ const LanguageRouter: React.FC<LanguageRouterProps> = ({ onPropertySelect }) => 
     const pathSegments = pathname.split('/').filter(Boolean);
     const detectedLanguage = pathSegments[0];
     
-    if (detectedLanguage === 'fr' || detectedLanguage === 'ar' || detectedLanguage === 'en' || detectedLanguage === 'es') {
+    // Langues supportées
+    const supportedLanguages = ['fr', 'ar', 'en', 'es'];
+    
+    if (supportedLanguages.includes(detectedLanguage)) {
       // Si la langue dans l'URL est différente de la langue actuelle
       if (detectedLanguage !== language) {
         setLanguage(detectedLanguage);
       }
+      setIsInitialized(true);
     } else {
       // Si aucune langue n'est spécifiée dans l'URL, rediriger vers la langue par défaut
-      const newPath = `/${language}${pathname}`;
+      const newPath = `/${language}${pathname === '/' ? '' : pathname}`;
       navigate(newPath, { replace: true });
     }
   }, [location.pathname, language, setLanguage, navigate]);
+
+  // Afficher un loader pendant l'initialisation
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
+  }
 
   return (
     <Routes>
