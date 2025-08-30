@@ -235,70 +235,40 @@ export const supabaseHelpers = {
   // Properties
   async getProperties() {
     try {
-      console.log('🔄 Utilisation directe de fetch...');
-      const response = await fetch('http://127.0.0.1:54321/rest/v1/properties?select=*&is_available=eq.true&is_approved=eq.true', {
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0'
-        }
-      });
+      console.log('🔄 Récupération des propriétés depuis Supabase Cloud...');
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('is_available', true)
+        .order('created_at', { ascending: false });
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw error;
       }
       
-      const data = await response.json();
-      console.log('✅ Fetch direct réussi:', data.length, 'propriétés');
-      return data;
+      console.log('✅ Propriétés récupérées:', data?.length || 0, 'propriétés');
+      return data || [];
     } catch (error) {
-      console.error('❌ Erreur fetch direct:', error);
-      console.log('🔄 Utilisation des données de test...');
-      // Dernier recours: données de test
-      return [
-        {
-          id: '1',
-          title: 'Appartement moderne près de la Médina',
-          description: 'Magnifique appartement de 2 chambres situé à proximité de la médina de Marrakech.',
-          price: 450,
-          city: 'Marrakech',
-          address: 'Quartier Hivernage, Marrakech',
-          lat: 31.6295,
-          lng: -8.0080,
-          images: ['https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800'],
-          amenities: ['WiFi', 'Climatisation', 'Cuisine équipée'],
-          bedrooms: 2,
-          bathrooms: 1,
-          max_guests: 4,
-          property_type: 'apartment',
-          owner_id: 'test-owner',
-          is_available: true,
-          is_approved: true,
-          rating: 4.8,
-          reviews_count: 23,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
+      console.error('❌ Erreur récupération propriétés:', error);
+      return [];
     }
   },
 
   async getPropertyById(id: string) {
     try {
       console.log('🔄 Récupération de la propriété:', id);
-      const response = await fetch(`http://127.0.0.1:54321/rest/v1/properties?id=eq.${id}&select=*`, {
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0',
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0'
-        }
-      });
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('id', id)
+        .single();
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw error;
       }
       
-      const data = await response.json();
-      console.log('✅ Propriété récupérée:', data[0]?.title);
-      return data[0]; // Retourner le premier élément car c'est un tableau
+      console.log('✅ Propriété récupérée:', data?.title);
+      return data;
     } catch (error) {
       console.error('❌ Erreur lors de la récupération de la propriété:', error);
       throw error;
