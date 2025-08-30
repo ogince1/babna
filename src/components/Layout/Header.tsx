@@ -73,15 +73,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick, onLoginClick }) => {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">B</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Babna.ma</h1>
-                <p className="text-xs text-gray-500">{t('welcomeSubtitle', language)}</p>
-              </div>
-            </div>
+                                  <div className="flex items-center">
+                        <img src="/logo.svg" alt="Babna.ma" className="h-12" />
+                      </div>
           </div>
 
           {/* Search Bar - Hidden on small screens */}

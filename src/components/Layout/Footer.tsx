@@ -35,9 +35,9 @@ const Footer: React.FC = () => {
           
           {/* Logo et description */}
           <div className="lg:col-span-1">
-            <div className="flex items-center mb-4">
-              <span className="text-2xl font-bold text-orange-500">Babna.ma</span>
-            </div>
+                                    <div className="flex items-center mb-4">
+                          <img src="/logo-white.svg" alt="Babna.ma" className="h-8 mr-2" />
+                        </div>
             <p className="text-gray-300 text-sm mb-4">
               {t('footer.description', language)}
             </p>
