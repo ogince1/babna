@@ -45,9 +45,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           role
         });
         if (error) throw error;
+        
+        // Réinitialiser le loading local après inscription réussie
+        setLoading(false);
       } else {
         const { error } = await signIn(email, password);
         if (error) throw error;
+        
+        // Réinitialiser le loading local après connexion réussie
+        setLoading(false);
       }
       
       // La modal se fermera automatiquement via useEffect
