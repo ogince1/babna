@@ -74,15 +74,42 @@ export const useSupabaseAuth = () => {
     try {
       console.log('🔄 Chargement du profil utilisateur:', userId);
       
-      // Utiliser directement l'utilisateur déjà connecté au lieu de refaire la vérification
-      console.log('🔄 Vérification de l\'utilisateur connecté...');
+          // Utiliser directement l'utilisateur déjà connecté au lieu de refaire la vérification
+    console.log('🔄 Vérification de l\'utilisateur connecté...');
+    
+    if (!user) {
+      console.log('⚠️ Aucun utilisateur connecté dans l\'état, tentative de récupération...');
       
-      if (!user) {
-        console.log('⚠️ Aucun utilisateur connecté, arrêt du chargement du profil');
+      // Essayer de récupérer l'utilisateur depuis Supabase Auth
+      try {
+        const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError || !currentUser) {
+          console.log('❌ Impossible de récupérer l\'utilisateur depuis Supabase Auth');
+          setProfile(null);
+          return;
+        }
+        
+        console.log('✅ Utilisateur récupéré depuis Supabase Auth:', currentUser.email);
+        console.log('✅ ID utilisateur récupéré:', currentUser.id);
+        
+        // Mettre à jour l'ID pour utiliser celui de l'utilisateur récupéré
+        if (currentUser.id !== userId) {
+          console.log('⚠️ ID utilisateur différent détecté:');
+          console.log('  - ID demandé:', userId);
+          console.log('  - ID récupéré:', currentUser.id);
+          console.log('🔄 Utilisation de l\'ID de l\'utilisateur récupéré');
+          userId = currentUser.id;
+        }
+        
+        console.log('✅ Utilisateur confirmé:', currentUser.email);
+        console.log('✅ ID utilisateur confirmé:', userId);
+      } catch (error) {
+        console.error('❌ Erreur lors de la récupération de l\'utilisateur:', error);
         setProfile(null);
         return;
       }
-      
+    } else {
       // Vérifier si l'ID correspond, sinon utiliser l'ID de l'utilisateur connecté
       if (user.id !== userId) {
         console.log('⚠️ ID utilisateur différent détecté:');
@@ -95,6 +122,7 @@ export const useSupabaseAuth = () => {
       
       console.log('✅ Utilisateur connecté confirmé:', user.email);
       console.log('✅ ID utilisateur confirmé:', userId);
+    }
       console.log('🔄 Tentative de récupération du profil depuis public.users...');
       
       // Essayer de récupérer le profil directement depuis Supabase
