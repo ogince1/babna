@@ -2,145 +2,481 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
-  <!-- Page d'accueil -->
+  <!-- Page d'accueil - Français -->
   <url>
     <loc>https://babna.ma/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Page d'accueil - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Page d'accueil - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Page d'accueil - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
-  <!-- Appartements -->
+  <!-- Appartements - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Appartements - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Appartements - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Appartements - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
-  <!-- Villes populaires -->
+  <!-- Marrakech - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/marrakech</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/marrakech"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/marrakech"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/marrakech"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/marrakech"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Marrakech - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/marrakech</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/marrakech"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/marrakech"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Marrakech - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/marrakech</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/marrakech"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Marrakech - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/marrakech</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/marrakech"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/marrakech"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
+  <!-- Casablanca - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/casablanca</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/casablanca"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/casablanca"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/casablanca"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/casablanca"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Casablanca - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/casablanca</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/casablanca"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/casablanca"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Casablanca - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/casablanca</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/casablanca"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Casablanca - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/casablanca</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/casablanca"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
+  <!-- Rabat - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/rabat</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/rabat"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Rabat - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/rabat</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/rabat"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/rabat"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Rabat - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/rabat</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/rabat"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Rabat - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/rabat</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/rabat"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/rabat"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
+  <!-- Fès - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/fes</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/fes"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Fès - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/fes</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/fes"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/fes"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Fès - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/fes</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/fes"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Fès - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/fes</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/fes"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/fes"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
+  <!-- Agadir - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/agadir</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/agadir"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Agadir - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/agadir</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/agadir"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/agadir"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Agadir - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/agadir</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/agadir"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Agadir - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/agadir</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/agadir"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/agadir"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
+  <!-- Tanger - Français -->
   <url>
     <loc>https://babna.ma/fr/appartements/ville/tanger</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/tanger"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tanger - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/appartements/ville/tanger</loc>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/tanger"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/tanger"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tanger - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/appartements/ville/tanger</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/tanger"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tanger - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/appartements/ville/tanger</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/ville/tanger"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/appartements/ville/tanger"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Types d'appartements -->
-  <url>
-    <loc>https://babna.ma/fr/appartements/type/appartement</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/type/appartement"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/type/appartement"/>
-    <lastmod>2024-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://babna.ma/fr/appartements/type/maison</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/type/maison"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/type/maison"/>
-    <lastmod>2024-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://babna.ma/fr/appartements/type/riad</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/type/riad"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/type/riad"/>
-    <lastmod>2024-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://babna.ma/fr/appartements/type/villa</loc>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/appartements/type/villa"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/appartements/type/villa"/>
-    <lastmod>2024-01-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- Blog -->
+  <!-- Blog - Français -->
   <url>
     <loc>https://babna.ma/fr/blog</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/blog"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/blog"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/blog"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/blog"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/blog</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/blog"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/blog"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/blog"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/blog"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/blog"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/blog"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/blog"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/blog</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/blog"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/blog"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/blog"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/blog"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Guides de voyage -->
+  <!-- Guides de voyage - Français -->
   <url>
     <loc>https://babna.ma/fr/guides</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/guides"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/guides"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/guides"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/guides"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guides de voyage - Arabe -->
+  <url>
+    <loc>https://babna.ma/ar/guides</loc>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/guides"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/guides"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/guides"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/guides"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guides de voyage - Anglais -->
+  <url>
+    <loc>https://babna.ma/en/guides</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/guides"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/guides"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/guides"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/guides"/>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guides de voyage - Espagnol -->
+  <url>
+    <loc>https://babna.ma/es/guides</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://babna.ma/es/guides"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://babna.ma/fr/guides"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://babna.ma/ar/guides"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://babna.ma/en/guides"/>
     <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
