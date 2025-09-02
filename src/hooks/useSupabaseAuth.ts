@@ -128,7 +128,7 @@ export const useSupabaseAuth = () => {
       console.log('🔄 Tentative d\'inscription:', email);
       setLoading(true);
       
-      // Inscription simple - créer seulement dans auth.users
+      // Étape 1: Créer l'utilisateur dans auth.users
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -144,7 +144,35 @@ export const useSupabaseAuth = () => {
 
       if (error) throw error;
 
-      console.log('✅ Inscription réussie, profil sera créé lors de la première connexion');
+      // Étape 2: Créer IMMÉDIATEMENT le profil dans public.users
+      if (data.user) {
+        console.log('🔄 Création immédiate du profil utilisateur...');
+        
+        try {
+          const { error: profileError } = await supabase
+            .from('users')
+            .insert({
+              id: data.user.id,
+              email: data.user.email!,
+              name: userData.name || '',
+              phone: userData.phone || null,
+              whatsapp: userData.whatsapp || null,
+              role: userData.role || 'client',
+            });
+
+          if (profileError) {
+            console.error('❌ Erreur lors de la création du profil:', profileError);
+            throw profileError;
+          }
+
+          console.log('✅ Profil utilisateur créé avec succès dans public.users');
+        } catch (profileError) {
+          console.error('❌ Erreur lors de la création du profil:', profileError);
+          // Si ça échoue, on continue quand même
+        }
+      }
+
+      console.log('✅ Inscription complète réussie:', data.user?.email);
       return { data, error: null };
     } catch (error) {
       console.error('❌ Erreur d\'inscription:', error);
