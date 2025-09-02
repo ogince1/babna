@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+const fs = require('fs');
+const path = require('path');
+
+console.log('🔧 RÉGÉNÉRATION DU SITEMAP.XML');
+console.log('================================');
+
+// Contenu du sitemap corrigé
+const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
@@ -242,4 +249,36 @@
     <priority>0.8</priority>
   </url>
   
-</urlset>
+</urlset>`;
+
+// Chemin du fichier sitemap
+const sitemapPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
+
+try {
+  // Écrire le nouveau sitemap
+  fs.writeFileSync(sitemapPath, sitemapContent, 'utf8');
+  console.log('✅ Sitemap régénéré avec succès !');
+  console.log('📍 Fichier :', sitemapPath);
+  
+  // Vérifier le contenu
+  const fileContent = fs.readFileSync(sitemapPath, 'utf8');
+  const lines = fileContent.split('\n');
+  
+  console.log('📊 Statistiques :');
+  console.log(`   - Lignes totales : ${lines.length}`);
+  console.log(`   - URLs : ${(lines.length - 3) / 10}`); // 10 lignes par URL
+  
+  console.log('');
+  console.log('🔍 Vérification du formatage :');
+  console.log('   - Première ligne :', lines[0].trim());
+  console.log('   - Dernière ligne :', lines[lines.length - 1].trim());
+  
+  console.log('');
+  console.log('💡 Si le problème persiste :');
+  console.log('   1. Videz le cache de votre navigateur');
+  console.log('   2. Rechargez la page avec Ctrl+F5 (ou Cmd+Shift+R)');
+  console.log('   3. Vérifiez que le serveur a bien mis à jour le fichier');
+  
+} catch (error) {
+  console.error('❌ Erreur lors de la régénération :', error);
+}
