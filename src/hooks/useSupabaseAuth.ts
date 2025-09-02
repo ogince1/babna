@@ -76,15 +76,36 @@ export const useSupabaseAuth = () => {
       
       // Vérifier d'abord si l'utilisateur est toujours connecté
       console.log('🔄 Vérification de la connexion utilisateur...');
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
       
-      if (!currentUser || currentUser.id !== userId) {
-        console.log('⚠️ Utilisateur non connecté ou ID différent, arrêt du chargement du profil');
-        setProfile(null);
-        return;
+      try {
+        // Ajouter un timeout pour éviter le blocage
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout lors de la vérification de la connexion')), 5000)
+        );
+        
+        const authPromise = supabase.auth.getUser();
+        
+        const { data: { user: currentUser } } = await Promise.race([authPromise, timeoutPromise]);
+        
+        if (!currentUser || currentUser.id !== userId) {
+          console.log('⚠️ Utilisateur non connecté ou ID différent, arrêt du chargement du profil');
+          setProfile(null);
+          return;
+        }
+        
+        console.log('✅ Utilisateur connecté confirmé:', currentUser.email);
+      } catch (authError) {
+        console.error('❌ Erreur lors de la vérification de la connexion:', authError);
+        
+        // Fallback: utiliser l'utilisateur déjà stocké dans le state
+        if (user && user.id === userId) {
+          console.log('⚠️ Utilisation de l\'utilisateur stocké en fallback');
+        } else {
+          console.log('❌ Impossible de vérifier la connexion, arrêt du chargement');
+          setProfile(null);
+          return;
+        }
       }
-      
-      console.log('✅ Utilisateur connecté confirmé:', currentUser.email);
       console.log('🔄 Tentative de récupération du profil depuis public.users...');
       
       // Essayer de récupérer le profil directement depuis Supabase
