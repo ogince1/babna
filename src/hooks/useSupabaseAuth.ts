@@ -133,16 +133,35 @@ export const useSupabaseAuth = () => {
       if (error) throw error;
 
       if (data.user) {
-        console.log('🔄 Inscription réussie, profil sera créé lors de la première connexion');
-        // Stocker les données utilisateur dans les métadonnées pour les récupérer lors de la connexion
-        await supabase.auth.updateUser({
-          data: {
-            name: userData.name || '',
-            phone: userData.phone || null,
-            whatsapp: userData.whatsapp || null,
-            role: userData.role || 'client'
-          }
-        });
+        console.log('🔄 Création immédiate du profil utilisateur...');
+        try {
+          // Créer le profil immédiatement dans public.users
+          const { error: profileError } = await supabase
+            .from('users')
+            .insert({
+              id: data.user.id,
+              email: data.user.email!,
+              name: userData.name || '',
+              phone: userData.phone || null,
+              whatsapp: userData.whatsapp || null,
+              role: userData.role || 'client',
+            });
+          
+          if (profileError) throw profileError;
+          console.log('✅ Profil utilisateur créé immédiatement');
+        } catch (profileError) {
+          console.error('❌ Erreur lors de la création du profil:', profileError);
+          // Fallback: stocker dans les métadonnées
+          await supabase.auth.updateUser({
+            data: {
+              name: userData.name || '',
+              phone: userData.phone || null,
+              whatsapp: userData.whatsapp || null,
+              role: userData.role || 'client'
+            }
+          });
+          console.log('⚠️ Profil stocké dans les métadonnées (fallback)');
+        }
       }
 
       console.log('✅ Inscription réussie:', data.user?.email);
