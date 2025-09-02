@@ -187,6 +187,7 @@ export const useSupabaseAuth = () => {
       }
 
       console.log('✅ Inscription complète réussie:', data.user?.email);
+      setLoading(false); // Désactiver le loading en cas de succès
       return { data, error: null };
     } catch (error) {
       console.error('❌ Erreur d\'inscription:', error);
