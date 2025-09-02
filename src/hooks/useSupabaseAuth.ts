@@ -75,13 +75,16 @@ export const useSupabaseAuth = () => {
       console.log('🔄 Chargement du profil utilisateur:', userId);
       
       // Vérifier d'abord si l'utilisateur est toujours connecté
+      console.log('🔄 Vérification de la connexion utilisateur...');
       const { data: { user: currentUser } } = await supabase.auth.getUser();
+      
       if (!currentUser || currentUser.id !== userId) {
         console.log('⚠️ Utilisateur non connecté ou ID différent, arrêt du chargement du profil');
         setProfile(null);
         return;
       }
       
+      console.log('✅ Utilisateur connecté confirmé:', currentUser.email);
       console.log('🔄 Tentative de récupération du profil depuis public.users...');
       
       // Essayer de récupérer le profil directement depuis Supabase
@@ -91,6 +94,8 @@ export const useSupabaseAuth = () => {
         .eq('id', userId)
         .single();
       
+      console.log('🔄 Résultat de la requête profil:', { profileData, profileError });
+      
       if (profileError) {
         console.log('⚠️ Erreur lors de la récupération du profil:', profileError);
         throw profileError;
@@ -98,7 +103,9 @@ export const useSupabaseAuth = () => {
       
       if (profileData && profileData.name && profileData.name !== 'Utilisateur') {
         console.log('✅ Profil utilisateur chargé depuis public.users:', profileData.name);
+        console.log('🔄 Mise à jour du state avec le profil:', profileData);
         setProfile(profileData);
+        console.log('✅ State profil mis à jour avec succès');
         return;
       }
       
@@ -173,13 +180,16 @@ export const useSupabaseAuth = () => {
           }
           
           console.log('✅ Nouveau profil chargé avec succès:', newProfileData.name);
+          console.log('🔄 Mise à jour du state avec le nouveau profil:', newProfileData);
           setProfile(newProfileData);
+          console.log('✅ State profil mis à jour avec succès');
           
         } catch (createError) {
           console.error('❌ Erreur lors de la création du profil:', createError);
           setProfile(null);
         }
       } else {
+        console.log('⚠️ Aucun utilisateur connecté, profil mis à null');
         setProfile(null);
       }
     }
