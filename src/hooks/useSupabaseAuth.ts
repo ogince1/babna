@@ -133,9 +133,22 @@ export const useSupabaseAuth = () => {
       if (error) throw error;
 
       if (data.user) {
-        console.log('🔄 Création immédiate du profil utilisateur...');
+        console.log('🔄 Attente de la création complète de l\'utilisateur...');
+        
+        // Attendre un peu que l'utilisateur soit complètement créé dans auth.users
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         try {
-          // Créer le profil immédiatement dans public.users
+          // Vérifier que l'utilisateur existe dans auth.users
+          const { data: authUser, error: authError } = await supabase.auth.getUser();
+          
+          if (authError || !authUser.user) {
+            throw new Error('Utilisateur non encore disponible dans auth.users');
+          }
+          
+          console.log('🔄 Création du profil utilisateur...');
+          
+          // Créer le profil dans public.users
           const { error: profileError } = await supabase
             .from('users')
             .insert({
@@ -148,7 +161,7 @@ export const useSupabaseAuth = () => {
             });
           
           if (profileError) throw profileError;
-          console.log('✅ Profil utilisateur créé immédiatement');
+          console.log('✅ Profil utilisateur créé avec succès');
         } catch (profileError) {
           console.error('❌ Erreur lors de la création du profil:', profileError);
           // Fallback: stocker dans les métadonnées
