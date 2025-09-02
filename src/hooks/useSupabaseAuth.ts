@@ -129,14 +129,19 @@ export const useSupabaseAuth = () => {
         console.log('🔄 Création du profil utilisateur...');
         // Create user profile with fallback for missing columns
         try {
-          await supabaseHelpers.createUser({
-            id: data.user.id,
-            email: data.user.email!,
-            name: userData.name || '',
-            phone: userData.phone || null,
-            whatsapp: userData.whatsapp || null,
-            role: userData.role || 'client',
-          });
+          // Utiliser directement le client Supabase avec le bon contexte
+          const { error: profileError } = await supabase
+            .from('users')
+            .insert({
+              id: data.user.id,
+              email: data.user.email!,
+              name: userData.name || '',
+              phone: userData.phone || null,
+              whatsapp: userData.whatsapp || null,
+              role: userData.role || 'client',
+            });
+          
+          if (profileError) throw profileError;
           console.log('✅ Profil utilisateur créé');
         } catch (profileError) {
           console.error('❌ Erreur lors de la création du profil:', profileError);
