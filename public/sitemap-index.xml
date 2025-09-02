@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Sitemap Français -->
+  <sitemap>
+    <loc>https://babna.ma/sitemap-fr.xml</loc>
+    <lastmod>2024-01-01</lastmod>
+  </sitemap>
+
+  <!-- Sitemap Arabe -->
+  <sitemap>
+    <loc>https://babna.ma/sitemap-ar.xml</loc>
+    <lastmod>2024-01-01</lastmod>
+  </sitemap>
+
+  <!-- Sitemap Anglais -->
+  <sitemap>
+    <loc>https://babna.ma/sitemap-en.xml</loc>
+    <lastmod>2024-01-01</lastmod>
+  </sitemap>
+
+  <!-- Sitemap Espagnol -->
+  <sitemap>
+    <loc>https://babna.ma/sitemap-es.xml</loc>
+    <lastmod>2024-01-01</lastmod>
+  </sitemap>
+
+</sitemapindex>
