@@ -82,19 +82,39 @@ export const useSupabaseAuth = () => {
         return;
       }
       
-      const profile = await supabaseHelpers.getCurrentUser();
-      console.log('✅ Profil utilisateur chargé:', profile?.name);
-      setProfile(profile);
+      console.log('🔄 Tentative de récupération du profil depuis public.users...');
+      
+      // Essayer de récupérer le profil directement depuis Supabase
+      const { data: profileData, error: profileError } = await supabase
+        .from('users')
+        .select('id, name, email, role, phone, avatar_url, whatsapp, created_at, updated_at')
+        .eq('id', userId)
+        .single();
+      
+      if (profileError) {
+        console.log('⚠️ Erreur lors de la récupération du profil:', profileError);
+        throw profileError;
+      }
+      
+      if (profileData) {
+        console.log('✅ Profil utilisateur chargé depuis public.users:', profileData.name);
+        setProfile(profileData);
+        return;
+      }
+      
+      console.log('⚠️ Aucun profil trouvé dans public.users');
+      throw new Error('Profil non trouvé');
+      
     } catch (error) {
       console.error('❌ Erreur lors du chargement du profil:', error);
-      // Ne pas mettre le profil à null si l'utilisateur est connecté mais le profil n'existe pas
-      // Cela peut arriver si l'utilisateur existe dans auth.users mais pas dans public.users
+      
+      // Si l'utilisateur est connecté mais le profil n'existe pas, le créer
       if (user) {
         console.log('⚠️ Utilisateur connecté mais profil non trouvé, création du profil...');
         try {
           console.log('🔄 Création automatique du profil utilisateur...');
           
-          // Créer le profil automatiquement lors de la première connexion
+          // Créer le profil automatiquement
           const { error: createError } = await supabase
             .from('users')
             .insert({
@@ -106,13 +126,29 @@ export const useSupabaseAuth = () => {
               role: user.user_metadata?.role || 'client'
             });
           
-          if (createError) throw createError;
+          if (createError) {
+            console.error('❌ Erreur lors de la création du profil:', createError);
+            throw createError;
+          }
           
           console.log('✅ Profil utilisateur créé automatiquement');
           
           // Recharger le profil créé
-          const newProfile = await supabaseHelpers.getCurrentUser();
-          setProfile(newProfile);
+          const { data: newProfileData, error: newProfileError } = await supabase
+            .from('users')
+            .select('id, name, email, role, phone, avatar_url, whatsapp, created_at, updated_at')
+            .eq('id', userId)
+            .single();
+          
+          if (newProfileError) {
+            console.error('❌ Erreur lors du rechargement du profil créé:', newProfileError);
+            setProfile(null);
+            return;
+          }
+          
+          console.log('✅ Nouveau profil chargé avec succès:', newProfileData.name);
+          setProfile(newProfileData);
+          
         } catch (createError) {
           console.error('❌ Erreur lors de la création du profil:', createError);
           setProfile(null);
