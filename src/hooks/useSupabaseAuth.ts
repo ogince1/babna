@@ -92,7 +92,9 @@ export const useSupabaseAuth = () => {
       if (user) {
         console.log('⚠️ Utilisateur connecté mais profil non trouvé, création du profil...');
         try {
-          // Créer un profil par défaut en utilisant les métadonnées stockées
+          console.log('🔄 Création automatique du profil utilisateur...');
+          
+          // Créer le profil automatiquement lors de la première connexion
           const { error: createError } = await supabase
             .from('users')
             .insert({
@@ -106,12 +108,13 @@ export const useSupabaseAuth = () => {
           
           if (createError) throw createError;
           
+          console.log('✅ Profil utilisateur créé automatiquement');
+          
           // Recharger le profil créé
           const newProfile = await supabaseHelpers.getCurrentUser();
           setProfile(newProfile);
-          console.log('✅ Profil par défaut créé lors de la première connexion');
         } catch (createError) {
-          console.error('❌ Erreur lors de la création du profil par défaut:', createError);
+          console.error('❌ Erreur lors de la création du profil:', createError);
           setProfile(null);
         }
       } else {
@@ -125,59 +128,23 @@ export const useSupabaseAuth = () => {
       console.log('🔄 Tentative d\'inscription:', email);
       setLoading(true);
       
+      // Inscription simple - créer seulement dans auth.users
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name: userData.name || '',
+            phone: userData.phone || null,
+            whatsapp: userData.whatsapp || null,
+            role: userData.role || 'client'
+          }
+        }
       });
 
       if (error) throw error;
 
-      if (data.user) {
-        console.log('🔄 Attente de la création complète de l\'utilisateur...');
-        
-        // Attendre un peu que l'utilisateur soit complètement créé dans auth.users
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        try {
-          // Vérifier que l'utilisateur existe dans auth.users
-          const { data: authUser, error: authError } = await supabase.auth.getUser();
-          
-          if (authError || !authUser.user) {
-            throw new Error('Utilisateur non encore disponible dans auth.users');
-          }
-          
-          console.log('🔄 Création du profil utilisateur...');
-          
-          // Créer le profil dans public.users
-          const { error: profileError } = await supabase
-            .from('users')
-            .insert({
-              id: data.user.id,
-              email: data.user.email!,
-              name: userData.name || '',
-              phone: userData.phone || null,
-              whatsapp: userData.whatsapp || null,
-              role: userData.role || 'client',
-            });
-          
-          if (profileError) throw profileError;
-          console.log('✅ Profil utilisateur créé avec succès');
-        } catch (profileError) {
-          console.error('❌ Erreur lors de la création du profil:', profileError);
-          // Fallback: stocker dans les métadonnées
-          await supabase.auth.updateUser({
-            data: {
-              name: userData.name || '',
-              phone: userData.phone || null,
-              whatsapp: userData.whatsapp || null,
-              role: userData.role || 'client'
-            }
-          });
-          console.log('⚠️ Profil stocké dans les métadonnées (fallback)');
-        }
-      }
-
-      console.log('✅ Inscription réussie:', data.user?.email);
+      console.log('✅ Inscription réussie, profil sera créé lors de la première connexion');
       return { data, error: null };
     } catch (error) {
       console.error('❌ Erreur d\'inscription:', error);
