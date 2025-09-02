@@ -77,13 +77,24 @@ export const useSupabaseAuth = () => {
       // Utiliser directement l'utilisateur déjà connecté au lieu de refaire la vérification
       console.log('🔄 Vérification de l\'utilisateur connecté...');
       
-      if (!user || user.id !== userId) {
-        console.log('⚠️ Utilisateur non connecté ou ID différent, arrêt du chargement du profil');
+      if (!user) {
+        console.log('⚠️ Aucun utilisateur connecté, arrêt du chargement du profil');
         setProfile(null);
         return;
       }
       
+      // Vérifier si l'ID correspond, sinon utiliser l'ID de l'utilisateur connecté
+      if (user.id !== userId) {
+        console.log('⚠️ ID utilisateur différent détecté:');
+        console.log('  - ID demandé:', userId);
+        console.log('  - ID connecté:', user.id);
+        console.log('🔄 Utilisation de l\'ID de l\'utilisateur connecté');
+        // Mettre à jour l'ID pour utiliser celui de l'utilisateur connecté
+        userId = user.id;
+      }
+      
       console.log('✅ Utilisateur connecté confirmé:', user.email);
+      console.log('✅ ID utilisateur confirmé:', userId);
       console.log('🔄 Tentative de récupération du profil depuis public.users...');
       
       // Essayer de récupérer le profil directement depuis Supabase
