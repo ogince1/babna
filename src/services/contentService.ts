@@ -60,7 +60,7 @@ export const contentService = {
         .select('*')
         .eq('is_published', true)
         .eq('is_verified', true)
-        .order('published_at', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(limit);
 
       if (city) {
@@ -83,7 +83,7 @@ export const contentService = {
         .from('blog_posts')
         .select('*')
         .eq('is_published', true)
-        .order('published_at', { ascending: false })
+        .order('created_at', { ascending: false })
         .limit(limit);
 
       if (category) {
@@ -140,7 +140,7 @@ export const contentService = {
         .from('travel_guides')
         .select('*')
         .eq('is_published', true)
-        .order('published_at', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (citySlug) {
         query = query.eq('city_slug', citySlug);
