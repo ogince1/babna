@@ -359,7 +359,7 @@ export const supabaseHelpers = {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('*')
+        .select('id, name, email, role, phone, avatar_url, whatsapp, created_at, updated_at')
         .eq('id', user.id)
         .single();
       
@@ -380,7 +380,7 @@ export const supabaseHelpers = {
       const { data, error } = await supabase
         .from('users')
         .insert(userData)
-        .select()
+        .select('id, name, email, role, phone, avatar_url, whatsapp, created_at, updated_at')
         .single();
       
       if (error) throw error;
@@ -396,7 +396,7 @@ export const supabaseHelpers = {
         const { data: fallbackData, error: fallbackError } = await supabase
           .from('users')
           .insert(userDataWithoutWhatsapp)
-          .select()
+          .select('id, name, email, role, phone, avatar_url, created_at, updated_at')
           .single();
         
         if (fallbackError) throw fallbackError;
