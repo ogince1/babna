@@ -96,10 +96,36 @@ export const useSupabaseAuth = () => {
         throw profileError;
       }
       
-      if (profileData) {
+      if (profileData && profileData.name && profileData.name !== 'Utilisateur') {
         console.log('✅ Profil utilisateur chargé depuis public.users:', profileData.name);
         setProfile(profileData);
         return;
+      }
+      
+      // Profil incomplet ou fantôme détecté
+      if (profileData && (profileData.name === 'Utilisateur' || !profileData.name)) {
+        console.log('⚠️ Profil fantôme détecté, suppression et recréation...');
+        
+        try {
+          // Supprimer le profil fantôme
+          const { error: deleteError } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', userId);
+          
+          if (deleteError) {
+            console.error('❌ Erreur lors de la suppression du profil fantôme:', deleteError);
+          } else {
+            console.log('✅ Profil fantôme supprimé');
+          }
+          
+          // Lancer la création d'un nouveau profil
+          throw new Error('Profil fantôme supprimé, création d\'un nouveau profil');
+          
+        } catch (deleteError) {
+          console.log('🔄 Suppression du profil fantôme terminée');
+          throw new Error('Profil fantôme supprimé, création d\'un nouveau profil');
+        }
       }
       
       console.log('⚠️ Aucun profil trouvé dans public.users');
