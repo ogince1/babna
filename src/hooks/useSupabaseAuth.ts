@@ -15,12 +15,32 @@ export const useSupabaseAuth = () => {
     // Get initial session
     const initializeAuth = async () => {
       try {
-        // Avec persistSession: false, il ne devrait pas y avoir de session au démarrage
-        console.log('🔄 Initialisation sans session persistante...');
+        console.log('🔄 Initialisation de l\'auth avec session persistante...');
         
-        setSession(null);
-        setUser(null);
-        setProfile(null);
+        // Récupérer la session initiale de manière non-bloquante
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        
+        if (initialSession) {
+          console.log('✅ Session initiale trouvée:', initialSession.user.email);
+          setSession(initialSession);
+          setUser(initialSession.user);
+          
+          // Charger le profil de manière non-bloquante
+          if (initialSession.user) {
+            try {
+              await loadUserProfile(initialSession.user.id);
+            } catch (error) {
+              console.error('❌ Erreur lors du chargement du profil initial:', error);
+              setProfile(null);
+            }
+          }
+        } else {
+          console.log('ℹ️ Aucune session initiale trouvée');
+          setSession(null);
+          setUser(null);
+          setProfile(null);
+        }
+        
         setLoading(false);
       } catch (error) {
         console.error('❌ Erreur lors de l\'initialisation de l\'auth:', error);
@@ -74,78 +94,79 @@ export const useSupabaseAuth = () => {
     try {
       console.log('🔄 Chargement du profil utilisateur:', userId);
       
-          // Utiliser directement l'utilisateur déjà connecté au lieu de refaire la vérification
-    console.log('🔄 Vérification de l\'utilisateur connecté...');
-    
-    if (!user) {
-      console.log('⚠️ Aucun utilisateur connecté dans l\'état, attente de la mise à jour...');
+      // Utiliser directement l'utilisateur déjà connecté au lieu de refaire la vérification
+      console.log('🔄 Vérification de l\'utilisateur connecté...');
       
-      // Attendre un peu que l'état se mette à jour
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Vérifier à nouveau si l'utilisateur est maintenant disponible
       if (!user) {
-        console.log('⚠️ Utilisateur toujours non disponible, tentative de récupération directe...');
+        console.log('⚠️ Aucun utilisateur connecté dans l\'état, tentative de récupération...');
         
-        // Essayer de récupérer l'utilisateur depuis Supabase Auth avec timeout
-        try {
-          console.log('🔄 Récupération de l\'utilisateur depuis Supabase Auth...');
+        // Attendre un peu que l'état se mette à jour
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        // Vérifier à nouveau si l'utilisateur est maintenant disponible
+        if (!user) {
+          console.log('⚠️ Utilisateur toujours non disponible, tentative de récupération directe...');
           
-          // Utiliser Promise.race pour éviter le blocage
-          const userPromise = supabase.auth.getUser();
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000)
-          );
-          
-          const { data: { user: currentUser }, error: userError } = await Promise.race([userPromise, timeoutPromise]) as any;
-          
-          if (userError || !currentUser) {
-            console.log('❌ Impossible de récupérer l\'utilisateur depuis Supabase Auth');
-            setProfile(null);
-            return;
+          // Essayer de récupérer l'utilisateur depuis Supabase Auth avec timeout plus long
+          try {
+            console.log('🔄 Récupération de l\'utilisateur depuis Supabase Auth...');
+            
+            // Utiliser Promise.race pour éviter le blocage avec timeout plus long
+            const userPromise = supabase.auth.getUser();
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Timeout - Connexion lente à Supabase')), 10000)
+            );
+            
+            const { data: { user: currentUser }, error: userError } = await Promise.race([userPromise, timeoutPromise]) as any;
+            
+            if (userError || !currentUser) {
+              console.log('❌ Impossible de récupérer l\'utilisateur depuis Supabase Auth');
+              setProfile(null);
+              return;
+            }
+            
+            console.log('✅ Utilisateur récupéré depuis Supabase Auth:', currentUser.email);
+            console.log('✅ ID utilisateur récupéré:', currentUser.id);
+            
+            // Mettre à jour l'ID pour utiliser celui de l'utilisateur récupéré
+            if (currentUser.id !== userId) {
+              console.log('⚠️ ID utilisateur différent détecté:');
+              console.log('  - ID demandé:', userId);
+              console.log('  - ID récupéré:', currentUser.id);
+              console.log('🔄 Utilisation de l\'ID de l\'utilisateur récupéré');
+              userId = currentUser.id;
+            }
+            
+            console.log('✅ Utilisateur confirmé:', currentUser.email);
+            console.log('✅ ID utilisateur confirmé:', userId);
+          } catch (error) {
+            console.error('❌ Erreur lors de la récupération de l\'utilisateur:', error);
+            console.log('⚠️ Utilisation de l\'ID fourni en paramètre');
+            // Continuer avec l'ID fourni en paramètre
           }
-          
-          console.log('✅ Utilisateur récupéré depuis Supabase Auth:', currentUser.email);
-          console.log('✅ ID utilisateur récupéré:', currentUser.id);
-          
-          // Mettre à jour l'ID pour utiliser celui de l'utilisateur récupéré
-          if (currentUser.id !== userId) {
-            console.log('⚠️ ID utilisateur différent détecté:');
-            console.log('  - ID demandé:', userId);
-            console.log('  - ID récupéré:', currentUser.id);
-            console.log('🔄 Utilisation de l\'ID de l\'utilisateur récupéré');
-            userId = currentUser.id;
-          }
-          
-          console.log('✅ Utilisateur confirmé:', currentUser.email);
-          console.log('✅ ID utilisateur confirmé:', userId);
-        } catch (error) {
-          console.error('❌ Erreur lors de la récupération de l\'utilisateur:', error);
-          console.log('⚠️ Utilisation de l\'ID fourni en paramètre');
-          // Continuer avec l'ID fourni en paramètre
+        } else {
+          console.log('✅ Utilisateur maintenant disponible dans l\'état');
         }
-      } else {
-        console.log('✅ Utilisateur maintenant disponible dans l\'état');
-      }
-    }
-    
-    if (!user) {
-      console.log('⚠️ Utilisateur toujours non disponible après tentative de récupération');
-      console.log('🔄 Utilisation de l\'ID fourni en paramètre:', userId);
-    } else {
-      // Vérifier si l'ID correspond, sinon utiliser l'ID de l'utilisateur connecté
-      if (user.id !== userId) {
-        console.log('⚠️ ID utilisateur différent détecté:');
-        console.log('  - ID demandé:', userId);
-        console.log('  - ID connecté:', user.id);
-        console.log('🔄 Utilisation de l\'ID de l\'utilisateur connecté');
-        // Mettre à jour l'ID pour utiliser celui de l'utilisateur connecté
-        userId = user.id;
       }
       
-      console.log('✅ Utilisateur connecté confirmé:', user.email);
-      console.log('✅ ID utilisateur confirmé:', userId);
-    }
+      if (!user) {
+        console.log('⚠️ Utilisateur toujours non disponible après tentative de récupération');
+        console.log('🔄 Utilisation de l\'ID fourni en paramètre:', userId);
+      } else {
+        // Vérifier si l'ID correspond, sinon utiliser l'ID de l'utilisateur connecté
+        if (user.id !== userId) {
+          console.log('⚠️ ID utilisateur différent détecté:');
+          console.log('  - ID demandé:', userId);
+          console.log('  - ID connecté:', user.id);
+          console.log('🔄 Utilisation de l\'ID de l\'utilisateur connecté');
+          // Mettre à jour l'ID pour utiliser celui de l'utilisateur connecté
+          userId = user.id;
+        }
+        
+        console.log('✅ Utilisateur connecté confirmé:', user.email);
+        console.log('✅ ID utilisateur confirmé:', userId);
+      }
+      
       console.log('🔄 Tentative de récupération du profil depuis public.users...');
       
       // Essayer de récupérer le profil directement depuis Supabase
@@ -285,14 +306,6 @@ export const useSupabaseAuth = () => {
         await new Promise(resolve => setTimeout(resolve, 2000));
         
         try {
-          // Vérifier que l'utilisateur existe dans auth.users
-          const { data: authUser, error: authError } = await supabase.auth.getUser();
-          
-          if (authError || !authUser.user) {
-            console.log('⚠️ Utilisateur pas encore disponible, attente supplémentaire...');
-            await new Promise(resolve => setTimeout(resolve, 3000));
-          }
-          
           console.log('🔄 Création du profil utilisateur...');
           
           const { error: profileError } = await supabase
