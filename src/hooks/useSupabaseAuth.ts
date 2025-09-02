@@ -92,17 +92,24 @@ export const useSupabaseAuth = () => {
       if (user) {
         console.log('⚠️ Utilisateur connecté mais profil non trouvé, création du profil...');
         try {
-          // Créer un profil par défaut
-          const defaultProfile = await supabaseHelpers.createUser({
-            id: userId,
-            email: user.email || '',
-            name: user.user_metadata?.name || user.email?.split('@')[0] || 'Utilisateur',
-            phone: null,
-            whatsapp: null,
-            role: 'client'
-          });
-          setProfile(defaultProfile);
-          console.log('✅ Profil par défaut créé:', defaultProfile?.name);
+          // Créer un profil par défaut en utilisant les métadonnées stockées
+          const { error: createError } = await supabase
+            .from('users')
+            .insert({
+              id: userId,
+              email: user.email || '',
+              name: user.user_metadata?.name || user.email?.split('@')[0] || 'Utilisateur',
+              phone: user.user_metadata?.phone || null,
+              whatsapp: user.user_metadata?.whatsapp || null,
+              role: user.user_metadata?.role || 'client'
+            });
+          
+          if (createError) throw createError;
+          
+          // Recharger le profil créé
+          const newProfile = await supabaseHelpers.getCurrentUser();
+          setProfile(newProfile);
+          console.log('✅ Profil par défaut créé lors de la première connexion');
         } catch (createError) {
           console.error('❌ Erreur lors de la création du profil par défaut:', createError);
           setProfile(null);
@@ -126,42 +133,16 @@ export const useSupabaseAuth = () => {
       if (error) throw error;
 
       if (data.user) {
-        console.log('🔄 Création du profil utilisateur...');
-        // Create user profile with fallback for missing columns
-        try {
-          // Utiliser directement le client Supabase avec le bon contexte
-          const { error: profileError } = await supabase
-            .from('users')
-            .insert({
-              id: data.user.id,
-              email: data.user.email!,
-              name: userData.name || '',
-              phone: userData.phone || null,
-              whatsapp: userData.whatsapp || null,
-              role: userData.role || 'client',
-            });
-          
-          if (profileError) throw profileError;
-          console.log('✅ Profil utilisateur créé');
-        } catch (profileError) {
-          console.error('❌ Erreur lors de la création du profil:', profileError);
-          // Fallback: créer le profil sans la colonne whatsapp
-          try {
-            const { error: fallbackError } = await supabase
-              .from('users')
-              .insert({
-                id: data.user.id,
-                email: data.user.email!,
-                name: userData.name || '',
-                phone: userData.phone || null,
-                role: userData.role || 'client',
-              });
-            if (fallbackError) throw fallbackError;
-            console.log('✅ Profil utilisateur créé (fallback)');
-          } catch (fallbackError) {
-            console.error('❌ Erreur lors de la création du profil (fallback):', fallbackError);
+        console.log('🔄 Inscription réussie, profil sera créé lors de la première connexion');
+        // Stocker les données utilisateur dans les métadonnées pour les récupérer lors de la connexion
+        await supabase.auth.updateUser({
+          data: {
+            name: userData.name || '',
+            phone: userData.phone || null,
+            whatsapp: userData.whatsapp || null,
+            role: userData.role || 'client'
           }
-        }
+        });
       }
 
       console.log('✅ Inscription réussie:', data.user?.email);
