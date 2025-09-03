@@ -22,6 +22,7 @@ import TravelerBookingsPage from './pages/TravelerBookingsPage';
 import PropertyDetailPage from './pages/PropertyDetailPage';
 import OwnerDashboardPage from './pages/OwnerDashboardPage';
 import ClientDashboardPage from './pages/ClientDashboardPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import FavoritesPage from './pages/FavoritesPage';
 import ProfilePage from './pages/ProfilePage';
@@ -92,6 +93,9 @@ const AppContent: React.FC = () => {
             <Route path="/proprietaire/modifier-propriete/:propertyId" element={<RoleProtectedRoute allowedRoles={['owner']}><EditPropertyPage /></RoleProtectedRoute>} />
             <Route path="/proprietaire/reservations" element={<RoleProtectedRoute allowedRoles={['owner']}><OwnerBookingsPage /></RoleProtectedRoute>} />
             <Route path="/proprietaire/dashboard" element={<RoleProtectedRoute allowedRoles={['owner']}><OwnerDashboardPage /></RoleProtectedRoute>} />
+            
+            {/* Routes protégées - Admin */}
+            <Route path="/admin/dashboard" element={<RoleProtectedRoute allowedRoles={['admin']}><AdminDashboardPage /></RoleProtectedRoute>} />
             
             {/* Routes protégées - Voyageur */}
             <Route path="/voyageur/reservations" element={<ProtectedRoute><TravelerBookingsPage /></ProtectedRoute>} />

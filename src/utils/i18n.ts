@@ -46,6 +46,7 @@ export const translations = {
     earnings: 'Revenus',
     
     // Admin
+    adminDashboard: 'Tableau de bord Admin',
     users: 'Utilisateurs',
     pendingApprovals: 'Approbations en attente',
     statistics: 'Statistiques',
@@ -116,6 +117,7 @@ export const translations = {
     earnings: 'الأرباح',
     
     // Admin
+    adminDashboard: 'لوحة تحكم المدير',
     users: 'المستخدمون',
     pendingApprovals: 'الموافقات المعلقة',
     statistics: 'الإحصائيات',
@@ -186,6 +188,7 @@ export const translations = {
     earnings: 'Earnings',
     
     // Admin
+    adminDashboard: 'Admin Dashboard',
     users: 'Users',
     pendingApprovals: 'Pending Approvals',
     statistics: 'Statistics',
@@ -256,6 +259,7 @@ export const translations = {
     earnings: 'Ganancias',
     
     // Admin
+    adminDashboard: 'Panel de Admin',
     users: 'Usuarios',
     pendingApprovals: 'Aprobaciones pendientes',
     statistics: 'Estadísticas',
