@@ -22,6 +22,13 @@ import BlogPage from '../pages/BlogPage';
 import BlogDetailPage from '../pages/BlogDetailPage';
 import TravelGuidePage from '../pages/TravelGuidePage';
 
+// Import des pages admin
+import AdminHomePage from '../pages/Admin/AdminHomePage';
+import AdminPropertiesPage from '../pages/Admin/AdminPropertiesPage';
+import AdminUsersPage from '../pages/Admin/AdminUsersPage';
+import AdminApprovalsPage from '../pages/Admin/AdminApprovalsPage';
+import AdminProfilePage from '../pages/Admin/AdminProfilePage';
+
 // Composants de routes pour chaque langue
 const ArabicRoutes: React.FC<{ onPropertySelect: (property: any) => void }> = ({ onPropertySelect }) => (
   <Routes>
@@ -194,6 +201,48 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
           <ProtectedRoute>
             <ProfilePage />
           </ProtectedRoute>
+        } 
+      />
+      
+      {/* Routes protégées - Admin */}
+      <Route 
+        path="/admin" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminHomePage />
+          </RoleProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/proprietes" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminPropertiesPage />
+          </RoleProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/utilisateurs" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminUsersPage />
+          </RoleProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/approbations" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminApprovalsPage />
+          </RoleProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/profil" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminProfilePage />
+          </RoleProtectedRoute>
         } 
       />
     </Routes>
