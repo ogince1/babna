@@ -5,6 +5,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { t } from '../../utils/i18n';
 import { properties, users, bookings } from '../../data/mockData';
 
+// Import des composants admin
+import AdminHomePage from '../../pages/Admin/AdminHomePage';
+import AdminPropertiesPage from '../../pages/Admin/AdminPropertiesPage';
+import AdminUsersPage from '../../pages/Admin/AdminUsersPage';
+import AdminApprovalsPage from '../../pages/Admin/AdminApprovalsPage';
+import AdminProfilePage from '../../pages/Admin/AdminProfilePage';
+
 const AdminDashboard: React.FC = () => {
   const { language } = useApp();
   const navigate = useNavigate();
@@ -126,31 +133,41 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="p-6">
-          <div className="text-center py-12">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Bienvenue dans le tableau de bord administrateur
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Utilisez le menu ci-dessus pour naviguer entre les différentes sections
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {menuItems.slice(1).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => navigate(item.path)}
-                    className="p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Icon className="h-6 w-6 text-orange-600" />
-                      <span className="font-medium text-gray-900">{item.label}</span>
-                    </div>
-                  </button>
-                );
-              })}
+          {/* Affichage conditionnel du contenu selon la route */}
+          {location.pathname === '/admin' && <AdminHomePage />}
+          {location.pathname === '/admin/proprietes' && <AdminPropertiesPage />}
+          {location.pathname === '/admin/utilisateurs' && <AdminUsersPage />}
+          {location.pathname === '/admin/approbations' && <AdminApprovalsPage />}
+          {location.pathname === '/admin/profil' && <AdminProfilePage />}
+          
+          {/* Page d'accueil par défaut si aucune route spécifique */}
+          {location.pathname === '/admin/dashboard' && (
+            <div className="text-center py-12">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Bienvenue dans le tableau de bord administrateur
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Utilisez le menu ci-dessus pour naviguer entre les différentes sections
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {menuItems.slice(1).map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => navigate(item.path)}
+                      className="p-4 border border-gray-200 rounded-lg hover:border-orange-300 hover:bg-orange-50 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Icon className="h-6 w-6 text-orange-600" />
+                        <span className="font-medium text-gray-900">{item.label}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ import AdminPropertiesPage from '../pages/Admin/AdminPropertiesPage';
 import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 import AdminApprovalsPage from '../pages/Admin/AdminApprovalsPage';
 import AdminProfilePage from '../pages/Admin/AdminProfilePage';
+import AdminDashboard from '../components/Dashboard/AdminDashboard';
 
 // Composants de routes pour chaque langue
 const ArabicRoutes: React.FC<{ onPropertySelect: (property: any) => void }> = ({ onPropertySelect }) => (
@@ -209,7 +210,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         path="/admin" 
         element={
           <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminHomePage />
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
@@ -217,7 +218,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         path="/admin/proprietes" 
         element={
           <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminPropertiesPage />
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
@@ -225,7 +226,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         path="/admin/utilisateurs" 
         element={
           <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminUsersPage />
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
@@ -233,7 +234,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         path="/admin/approbations" 
         element={
           <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminApprovalsPage />
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
@@ -241,7 +242,7 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         path="/admin/profil" 
         element={
           <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminProfilePage />
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
