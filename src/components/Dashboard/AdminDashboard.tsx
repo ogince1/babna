@@ -1,46 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Users, Home, TrendingUp, Check, X, Eye, 
-  FileText, MessageSquare, MapPin, Settings,
-  Plus, Edit, Trash2, Calendar, DollarSign,
-  BarChart3, UserCheck, Building2, Globe
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, Home, TrendingUp, Check, X, Eye } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { t } from '../../utils/i18n';
-import { supabase } from '../../lib/supabase';
-import BlogForm from './BlogForm';
+import { properties, users, bookings } from '../../data/mockData';
 
 const AdminDashboard: React.FC = () => {
   const { language } = useApp();
   const [activeTab, setActiveTab] = useState('overview');
-  const [loading, setLoading] = useState(true);
-  
-  // États des données
-  const [users, setUsers] = useState<any[]>([]);
-  const [properties, setProperties] = useState<any[]>([]);
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [faqs, setFaqs] = useState<any[]>([]);
-  const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [travelGuides, setTravelGuides] = useState<any[]>([]);
 
-  // États pour les formulaires
-  const [showBlogForm, setShowBlogForm] = useState(false);
-  const [showFAQForm, setShowFAQForm] = useState(false);
-  const [showTestimonialForm, setShowTestimonialForm] = useState(false);
-  const [showTravelGuideForm, setShowTravelGuideForm] = useState(false);
-
-  // Stats calculées
   const stats = {
     totalUsers: users.length,
     totalProperties: properties.length,
     totalBookings: bookings.length,
-    totalRevenue: bookings.reduce((sum: number, booking: any) => sum + (booking.totalPrice * 0.15), 0),
-    pendingProperties: properties.filter((p: any) => !p.is_approved).length,
-    totalBlogPosts: blogPosts.length,
-    totalFaqs: faqs.length,
-    totalTestimonials: testimonials.length,
-    totalTravelGuides: travelGuides.length
+    totalRevenue: bookings.reduce((sum, booking) => sum + (booking.totalPrice * 0.15), 0),
+    pendingProperties: properties.filter(p => !p.isApproved).length
   };
 
   const tabs = [
@@ -48,135 +21,17 @@ const AdminDashboard: React.FC = () => {
     { id: 'users', label: t('users', language), icon: Users },
     { id: 'properties', label: 'Biens immobiliers', icon: Home },
     { id: 'approvals', label: t('pendingApprovals', language), icon: Check },
-    { id: 'blog', label: 'Blog & Articles', icon: FileText },
-    { id: 'faq', label: 'FAQ', icon: MessageSquare },
-    { id: 'testimonials', label: 'Témoignages', icon: UserCheck },
-    { id: 'travel-guides', label: 'Guides de voyage', icon: MapPin },
-    { id: 'statistics', label: t('statistics', language), icon: BarChart3 }
+    { id: 'statistics', label: t('statistics', language), icon: TrendingUp }
   ];
 
-  // Chargement des données
-  useEffect(() => {
-    loadAllData();
-  }, []);
-
-  const loadAllData = async () => {
-    try {
-      setLoading(true);
-      
-      // Charger les utilisateurs
-      const { data: usersData } = await supabase
-        .from('users')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setUsers(usersData || []);
-
-      // Charger les propriétés
-      const { data: propertiesData } = await supabase
-        .from('properties')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setProperties(propertiesData || []);
-
-      // Charger les articles de blog
-      const { data: blogData } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setBlogPosts(blogData || []);
-
-      // Charger les FAQ
-      const { data: faqsData } = await supabase
-        .from('faqs')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setFaqs(faqsData || []);
-
-      // Charger les témoignages
-      const { data: testimonialsData } = await supabase
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setTestimonials(testimonialsData || []);
-
-      // Charger les guides de voyage
-      const { data: guidesData } = await supabase
-        .from('travel_guides')
-        .select('*')
-        .order('created_at', { ascending: false });
-      setTravelGuides(guidesData || []);
-
-    } catch (error) {
-      console.error('Erreur lors du chargement des données:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleApproveProperty = (propertyId: string) => {
+    // Simulate approval process
+    console.log('Approving property:', propertyId);
   };
 
-  // Fonctions de gestion des propriétés
-  const handleApproveProperty = async (propertyId: string) => {
-    try {
-      const { error } = await supabase
-        .from('properties')
-        .update({ is_approved: true })
-        .eq('id', propertyId);
-      
-      if (!error) {
-        await loadAllData(); // Recharger les données
-        console.log('Propriété approuvée:', propertyId);
-      }
-    } catch (error) {
-      console.error('Erreur lors de l\'approbation:', error);
-    }
-  };
-
-  const handleRejectProperty = async (propertyId: string) => {
-    try {
-      const { error } = await supabase
-        .from('properties')
-        .delete()
-        .eq('id', propertyId);
-      
-      if (!error) {
-        await loadAllData(); // Recharger les données
-        console.log('Propriété rejetée et supprimée:', propertyId);
-      }
-    } catch (error) {
-      console.error('Erreur lors du rejet:', error);
-    }
-  };
-
-  // Fonctions de gestion du blog
-  const createBlogPost = async (postData: any) => {
-    try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert(postData);
-      
-      if (!error) {
-        await loadAllData();
-        setShowBlogForm(false);
-        console.log('Article de blog créé avec succès');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la création de l\'article:', error);
-    }
-  };
-
-  const deleteBlogPost = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .delete()
-        .eq('id', id);
-      
-      if (!error) {
-        await loadAllData();
-        console.log('Article de blog supprimé:', id);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
-    }
+  const handleRejectProperty = (propertyId: string) => {
+    // Simulate rejection process
+    console.log('Rejecting property:', propertyId);
   };
 
   return (
@@ -187,7 +42,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center">
             <div className="p-3 bg-blue-100 rounded-full">
@@ -215,11 +70,11 @@ const AdminDashboard: React.FC = () => {
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center">
             <div className="p-3 bg-orange-100 rounded-full">
-              <FileText className="h-6 w-6 text-orange-600" />
+              <TrendingUp className="h-6 w-6 text-orange-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Articles</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalBlogPosts}</p>
+              <p className="text-sm font-medium text-gray-600">Réservations</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.totalBookings}</p>
             </div>
           </div>
         </div>
@@ -227,38 +82,11 @@ const AdminDashboard: React.FC = () => {
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center">
             <div className="p-3 bg-purple-100 rounded-full">
-              <MessageSquare className="h-6 w-6 text-purple-600" />
+              <TrendingUp className="h-6 w-6 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">FAQ</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalFaqs}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Cards Row 2 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-yellow-100 rounded-full">
-              <UserCheck className="h-6 w-6 text-yellow-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Témoignages</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalTestimonials}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-indigo-100 rounded-full">
-              <MapPin className="h-6 w-6 text-indigo-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Guides</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalTravelGuides}</p>
+              <p className="text-sm font-medium text-gray-600">Commission</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.totalRevenue.toLocaleString()} MAD</p>
             </div>
           </div>
         </div>
@@ -271,18 +99,6 @@ const AdminDashboard: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">En attente</p>
               <p className="text-2xl font-bold text-gray-900">{stats.pendingProperties}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-emerald-100 rounded-full">
-              <DollarSign className="h-6 w-6 text-emerald-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Revenus</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalRevenue.toLocaleString()} MAD</p>
             </div>
           </div>
         </div>
@@ -489,76 +305,6 @@ const AdminDashboard: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'blog' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold">Gestion du blog et des articles</h3>
-                <button
-                  onClick={() => setShowBlogForm(true)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nouvel article
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {blogPosts.map((post) => (
-                  <div key={post.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          post.is_published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {post.is_published ? 'Publié' : 'Brouillon'}
-                        </span>
-                        <div className="flex space-x-2">
-                          <button className="text-blue-600 hover:text-blue-900">
-                            <Edit className="h-4 w-4" />
-                          </button>
-                          <button 
-                            onClick={() => deleteBlogPost(post.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                      <h4 className="font-semibold text-lg mb-2">{post.title}</h4>
-                      <p className="text-gray-600 text-sm mb-3">{post.excerpt}</p>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <span>{post.author || 'Anonyme'}</span>
-                        <span>{new Date(post.created_at).toLocaleDateString()}</span>
-                      </div>
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-1">
-                          {post.tags.map((tag: string, index: number) => (
-                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {blogPosts.length === 0 && (
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Aucun article de blog pour le moment</p>
-                  <button
-                    onClick={() => setShowBlogForm(true)}
-                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                  >
-                    Créer le premier article
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
           {activeTab === 'statistics' && (
             <div>
               <h3 className="text-lg font-semibold mb-6">Statistiques de la plateforme</h3>
@@ -614,13 +360,6 @@ const AdminDashboard: React.FC = () => {
           )}
         </div>
       </div>
-
-      {/* Composants de formulaires */}
-      <BlogForm
-        isOpen={showBlogForm}
-        onClose={() => setShowBlogForm(false)}
-        onSubmit={createBlogPost}
-      />
     </div>
   );
 };

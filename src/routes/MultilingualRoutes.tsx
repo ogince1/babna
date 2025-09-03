@@ -21,7 +21,55 @@ import ProfilePage from '../pages/ProfilePage';
 import BlogPage from '../pages/BlogPage';
 import BlogDetailPage from '../pages/BlogDetailPage';
 import TravelGuidePage from '../pages/TravelGuidePage';
-import AdminDashboard from '../components/Dashboard/AdminDashboard';
+
+// Composants de routes pour chaque langue
+const ArabicRoutes: React.FC<{ onPropertySelect: (property: any) => void }> = ({ onPropertySelect }) => (
+  <Routes>
+    <Route path="/" element={<HomePage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements" element={<PropertiesPage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements/ville/:citySlug" element={<CityPage />} />
+    <Route path="/appartements/type/:typeSlug" element={<TypePage />} />
+    <Route path="/appartements/lieu/:placeSlug" element={<PlacePage />} />
+    <Route path="/appartements/tag/:tagSlug" element={<TagPage />} />
+    <Route path="/appartements/:propertyId" element={<PropertyDetailPage />} />
+    <Route path="/reserver/:propertyId" element={<BookingPage />} />
+    <Route path="/blog" element={<BlogPage />} />
+    <Route path="/blog/:postId" element={<BlogDetailPage />} />
+    <Route path="/guides" element={<TravelGuidePage />} />
+  </Routes>
+);
+
+const EnglishRoutes: React.FC<{ onPropertySelect: (property: any) => void }> = ({ onPropertySelect }) => (
+  <Routes>
+    <Route path="/" element={<HomePage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements" element={<PropertiesPage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements/ville/:citySlug" element={<CityPage />} />
+    <Route path="/appartements/type/:typeSlug" element={<TypePage />} />
+    <Route path="/appartements/lieu/:placeSlug" element={<PlacePage />} />
+    <Route path="/appartements/tag/:tagSlug" element={<TagPage />} />
+    <Route path="/appartements/:propertyId" element={<PropertyDetailPage />} />
+    <Route path="/reserver/:propertyId" element={<BookingPage />} />
+    <Route path="/blog" element={<BlogPage />} />
+    <Route path="/blog/:postId" element={<BlogDetailPage />} />
+    <Route path="/guides" element={<TravelGuidePage />} />
+  </Routes>
+);
+
+const SpanishRoutes: React.FC<{ onPropertySelect: (property: any) => void }> = ({ onPropertySelect }) => (
+  <Routes>
+    <Route path="/" element={<HomePage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements" element={<PropertiesPage onPropertySelect={onPropertySelect} />} />
+    <Route path="/appartements/ville/:citySlug" element={<CityPage />} />
+    <Route path="/appartements/type/:typeSlug" element={<TypePage />} />
+    <Route path="/appartements/lieu/:placeSlug" element={<PlacePage />} />
+    <Route path="/appartements/tag/:tagSlug" element={<TagPage />} />
+    <Route path="/appartements/:propertyId" element={<PropertyDetailPage />} />
+    <Route path="/reserver/:propertyId" element={<BookingPage />} />
+    <Route path="/blog" element={<BlogPage />} />
+    <Route path="/blog/:postId" element={<BlogDetailPage />} />
+    <Route path="/guides" element={<TravelGuidePage />} />
+  </Routes>
+);
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useApp();
@@ -49,7 +97,7 @@ interface MultilingualRoutesProps {
 const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelect }) => {
   return (
     <Routes>
-      {/* Routes publiques */}
+      {/* Routes publiques - Français (langue par défaut, pas de préfixe) */}
       <Route path="/" element={<HomePage onPropertySelect={onPropertySelect} />} />
       <Route path="/appartements" element={<PropertiesPage onPropertySelect={onPropertySelect} />} />
       <Route path="/appartements/ville/:citySlug" element={<CityPage />} />
@@ -65,6 +113,11 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/blog/:postId" element={<BlogDetailPage />} />
       <Route path="/guides" element={<TravelGuidePage />} />
+      
+      {/* Routes avec préfixe de langue pour les autres langues */}
+      <Route path="/ar/*" element={<ArabicRoutes onPropertySelect={onPropertySelect} />} />
+      <Route path="/en/*" element={<EnglishRoutes onPropertySelect={onPropertySelect} />} />
+      <Route path="/es/*" element={<SpanishRoutes onPropertySelect={onPropertySelect} />} />
       
       {/* Routes protégées - Propriétaire */}
       <Route 
@@ -114,16 +167,6 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         element={
           <RoleProtectedRoute allowedRoles={['client']}>
             <ClientDashboardPage />
-          </RoleProtectedRoute>
-        } 
-      />
-      
-      {/* Routes protégées - Admin */}
-      <Route 
-        path="/admin/dashboard" 
-        element={
-          <RoleProtectedRoute allowedRoles={['admin']}>
-            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />

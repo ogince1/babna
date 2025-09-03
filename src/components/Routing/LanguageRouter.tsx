@@ -20,8 +20,8 @@ const LanguageRouter: React.FC<LanguageRouterProps> = ({ onPropertySelect }) => 
     const pathSegments = pathname.split('/').filter(Boolean);
     const detectedLanguage = pathSegments[0];
     
-    // Langues supportées
-    const supportedLanguages = ['fr', 'ar', 'en', 'es'];
+    // Langues supportées (français est la langue par défaut, pas de préfixe)
+    const supportedLanguages = ['ar', 'en', 'es'];
     
     if (supportedLanguages.includes(detectedLanguage)) {
       // Si la langue dans l'URL est différente de la langue actuelle
@@ -30,9 +30,11 @@ const LanguageRouter: React.FC<LanguageRouterProps> = ({ onPropertySelect }) => 
       }
       setIsInitialized(true);
     } else {
-      // Si aucune langue n'est spécifiée dans l'URL, rediriger vers la langue par défaut
-      const newPath = `/${language}${pathname === '/' ? '' : pathname}`;
-      navigate(newPath, { replace: true });
+      // Si aucune langue n'est spécifiée dans l'URL, c'est le français (langue par défaut)
+      if (language !== 'fr') {
+        setLanguage('fr');
+      }
+      setIsInitialized(true);
     }
   }, [location.pathname, language, setLanguage, navigate]);
 

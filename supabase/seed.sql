@@ -150,7 +150,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Experience incroyable dans ce riad traditionnel. Le service etait exceptionnel.", "ar": "تجربة رائعة في هذا الرياد التقليدي. الخدمة كانت استثنائية.", "en": "Amazing experience in this traditional riad. The service was exceptional.", "es": "Experiencia increíble en este riad tradicional. El servicio fue excepcional."}',
   'Fès',
-  true,
+    true,
   true
 ),
 (
@@ -158,7 +158,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Villa magnifique a Agadir avec vue sur l ocean. Parfait pour des vacances en famille.", "ar": "فيلا رائعة في أكادير بإطلالة على المحيط. مثالية للعطلات العائلية.", "en": "Magnificent villa in Agadir with ocean view. Perfect for family vacations.", "es": "Villa magnífica en Agadir con vista al océano. Perfecta para vacaciones familiares."}',
   'Agadir',
-  true,
+    true,
   true
 ),
 (
@@ -166,7 +166,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   4,
   '{"fr": "Studio tres bien equipe au centre de Rabat. Emplacement ideal pour visiter la ville.", "ar": "استوديو مجهز تجهيزاً جيداً في وسط الرباط. موقع مثالي لزيارة المدينة.", "en": "Very well equipped studio in the center of Rabat. Ideal location to visit the city.", "es": "Estudio muy bien equipado en el centro de Rabat. Ubicación ideal para visitar la ciudad."}',
   'Rabat',
-  true,
+    true,
   true
 ),
 (
@@ -174,7 +174,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Riad authentique dans la medina de Tanger. Vue imprenable sur le detroit.", "ar": "رياد أصيل في مدينة طنجة القديمة. إطلالة رائعة على المضيق.", "en": "Authentic riad in the medina of Tangier. Breathtaking view of the strait.", "es": "Riad auténtico en la medina de Tánger. Vista impresionante del estrecho."}',
   'Tanger',
-  true,
+    true,
   true
 ),
 (
@@ -182,7 +182,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   4,
   '{"fr": "Charmant appartement a Essaouira, proche de la plage et du port. Tres calme.", "ar": "شقة ساحرة في الصويرة، قريبة من الشاطئ والميناء. هادئة جداً.", "en": "Charming apartment in Essaouira, close to the beach and port. Very quiet.", "es": "Apartamento encantador en Essaouira, cerca de la playa y el puerto. Muy tranquilo."}',
   'Essaouira',
-  true,
+    true,
   true
 ),
 (
@@ -190,15 +190,15 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Service client exceptionnel. L appartement etait exactement comme decrit.", "ar": "خدمة عملاء استثنائية. الشقة كانت تماماً كما هو موصوف.", "en": "Exceptional customer service. The apartment was exactly as described.", "es": "Servicio al cliente excepcional. El apartamento era exactamente como se describió."}',
   'Marrakech',
-  true,
+    true,
   true
 ),
 (
   'Isabella Silva',
   4,
   '{"fr": "Belle villa avec piscine a Casablanca. Parfait pour un sejour de luxe.", "ar": "فيلا جميلة مع مسبح في الدار البيضاء. مثالية لإقامة فاخرة.", "en": "Beautiful villa with pool in Casablanca. Perfect for a luxury stay.", "es": "Hermosa villa con piscina en Casablanca. Perfecta para una estancia de lujo."}',
-  'Casablanca',
-  true,
+    'Casablanca',
+    true,
   true
 ),
 (
@@ -206,7 +206,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Experience unique dans la medina de Fes. Le riad etait magnifique.", "ar": "تجربة فريدة في مدينة فاس القديمة. الرياد كان رائعاً.", "en": "Unique experience in the medina of Fes. The riad was magnificent.", "es": "Experiencia única en la medina de Fez. El riad era magnífico."}',
   'Fès',
-  true,
+    true,
   true
 ),
 (
@@ -214,7 +214,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   4,
   '{"fr": "Appartement moderne et confortable a Rabat. Tres bien situe.", "ar": "شقة حديثة ومريحة في الرباط. موقعها جيد جداً.", "en": "Modern and comfortable apartment in Rabat. Very well located.", "es": "Apartamento moderno y cómodo en Rabat. Muy bien ubicado."}',
   'Rabat',
-  true,
+    true,
   true
 ),
 (
@@ -222,14 +222,14 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Vue spectaculaire sur l ocean depuis la villa d Agadir. Memorable.", "ar": "إطلالة مذهلة على المحيط من فيلا أكادير. لا تُنسى.", "en": "Spectacular ocean view from the Agadir villa. Memorable.", "es": "Vista espectacular del océano desde la villa de Agadir. Inolvidable."}',
   'Agadir',
-  true,
+    true,
   true
 ),
 (
   'Layla Hassan',
   4,
   '{"fr": "Studio parfait pour un couple a Tanger. Vue sur la mer.", "ar": "استوديو مثالي للزوجين في طنجة. إطلالة على البحر.", "en": "Perfect studio for a couple in Tangier. Sea view.", "es": "Estudio perfecto para una pareja en Tánger. Vista al mar."}',
-  'Tanger',
+    'Tanger',
   true,
   true
 ),
@@ -246,7 +246,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   4,
   '{"fr": "Excellent rapport qualite-prix a Casablanca. Tres satisfaite.", "ar": "نسبة سعر ممتازة في الدار البيضاء. راضية جداً.", "en": "Excellent value for money in Casablanca. Very satisfied.", "es": "Excelente relación calidad-precio en Casablanca. Muy satisfecha."}',
   'Casablanca',
-  true,
+    true,
   true
 ),
 (
@@ -254,7 +254,7 @@ INSERT INTO testimonials (author_name, rating, content, city, is_verified, is_pu
   5,
   '{"fr": "Service impeccable et appartement de qualite a Marrakech.", "ar": "خدمة لا تشوبها شائبة وشقة عالية الجودة في مراكش.", "en": "Impeccable service and quality apartment in Marrakech.", "es": "Servicio impecable y apartamento de calidad en Marrakech."}',
   'Marrakech',
-  true,
+    true,
   true
 );
 
