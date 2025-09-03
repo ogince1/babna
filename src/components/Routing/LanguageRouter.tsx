@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Routes, Route } from 'react-router-dom';
 import { useApp } from '../../context/AppContext';
 import MultilingualRoutes from '../../routes/MultilingualRoutes';
+import FrenchRedirect from './FrenchRedirect';
 
 interface LanguageRouterProps {
   onPropertySelect: (property: any) => void;
@@ -48,10 +49,15 @@ const LanguageRouter: React.FC<LanguageRouterProps> = ({ onPropertySelect }) => 
   }
 
   return (
-    <Routes>
-      {/* Routes avec préfixe de langue */}
-      <Route path="/*" element={<MultilingualRoutes onPropertySelect={onPropertySelect} />} />
-    </Routes>
+    <>
+      {/* Composant de redirection pour /fr vers / */}
+      <FrenchRedirect />
+      
+      <Routes>
+        {/* Routes avec préfixe de langue */}
+        <Route path="/*" element={<MultilingualRoutes onPropertySelect={onPropertySelect} />} />
+      </Routes>
+    </>
   );
 };
 
