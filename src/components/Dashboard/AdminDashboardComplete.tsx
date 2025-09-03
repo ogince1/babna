@@ -7,55 +7,15 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { t } from '../../utils/i18n';
+import AdminService, { 
+  AdminUser, 
+  AdminProperty, 
+  AdminBooking, 
+  AdminContent, 
+  AdminStats 
+} from '../../services/adminService';
 
-// Types pour les données
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'owner' | 'client';
-  phone?: string;
-  createdAt: string;
-  isActive: boolean;
-  lastLogin?: string;
-}
-
-interface Property {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: { city: string; address: string };
-  bedrooms: number;
-  bathrooms: number;
-  images: string[];
-  isApproved: boolean;
-  ownerId: string;
-  createdAt: string;
-  rating?: number;
-  reviewsCount?: number;
-}
-
-interface Booking {
-  id: string;
-  propertyId: string;
-  userId: string;
-  checkIn: string;
-  checkOut: string;
-  totalPrice: number;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
-  createdAt: string;
-}
-
-interface ContentItem {
-  id: string;
-  title: string;
-  type: 'blog' | 'faq' | 'testimonial' | 'guide';
-  status: 'draft' | 'published' | 'archived';
-  author: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Types pour les données - maintenant importés du service
 
 const AdminDashboardComplete: React.FC = () => {
   const { language } = useApp();
@@ -65,10 +25,11 @@ const AdminDashboardComplete: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // États pour les données
-  const [users, setUsers] = useState<User[]>([]);
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [properties, setProperties] = useState<AdminProperty[]>([]);
+  const [bookings, setBookings] = useState<AdminBooking[]>([]);
+  const [contentItems, setContentItems] = useState<AdminContent[]>([]);
+  const [stats, setStats] = useState<AdminStats | null>(null);
 
   // Charger les données
   useEffect(() => {
@@ -78,26 +39,47 @@ const AdminDashboardComplete: React.FC = () => {
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
-      // Ici vous chargeriez les vraies données depuis Supabase
-      // Pour l'instant, on utilise des données mock
-      console.log('Chargement des données du tableau de bord...');
+      console.log('🔄 Chargement des données du tableau de bord...');
+      
+      // Charger les statistiques
+      const adminStats = await AdminService.getAdminStats();
+      setStats(adminStats);
+      
+      // Charger les utilisateurs
+      const { users: usersData } = await AdminService.getUsers(1, 20);
+      setUsers(usersData);
+      
+      // Charger les propriétés
+      const { properties: propertiesData } = await AdminService.getProperties(1, 20);
+      setProperties(propertiesData);
+      
+      // Charger les réservations
+      const { bookings: bookingsData } = await AdminService.getBookings(1, 20);
+      setBookings(bookingsData);
+      
+      // Charger le contenu
+      const { content: contentData } = await AdminService.getContent(1, 20);
+      setContentItems(contentData);
+      
+      console.log('✅ Données chargées avec succès');
     } catch (error) {
-      console.error('Erreur lors du chargement:', error);
+      console.error('❌ Erreur lors du chargement:', error);
+      // En cas d'erreur, on peut afficher un message à l'utilisateur
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Statistiques calculées
-  const stats = {
-    totalUsers: users.length,
-    totalProperties: properties.length,
-    totalBookings: bookings.length,
-    totalRevenue: bookings.reduce((sum, booking) => sum + (booking.totalPrice * 0.15), 0),
-    pendingProperties: properties.filter(p => !p.isApproved).length,
-    activeUsers: users.filter(u => u.isActive).length,
-    pendingBookings: bookings.filter(b => b.status === 'pending').length,
-    publishedContent: contentItems.filter(c => c.status === 'published').length
+  // Statistiques calculées - utilisent les vraies données si disponibles
+  const calculatedStats = {
+    totalUsers: stats?.totalUsers || users.length,
+    totalProperties: stats?.totalProperties || properties.length,
+    totalBookings: stats?.totalBookings || bookings.length,
+    totalRevenue: stats?.totalRevenue || bookings.reduce((sum, booking) => sum + (booking.total_price * 0.15), 0),
+    pendingProperties: stats?.pendingProperties || properties.filter(p => !p.is_approved).length,
+    activeUsers: stats?.activeUsers || users.filter(u => u.is_active).length,
+    pendingBookings: stats?.pendingBookings || bookings.filter(b => b.status === 'pending').length,
+    publishedContent: stats?.publishedContent || contentItems.filter(c => c.status === 'published').length
   };
 
   // Onglets du tableau de bord
@@ -117,14 +99,24 @@ const AdminDashboardComplete: React.FC = () => {
   const handleApproveProperty = async (propertyId: string) => {
     try {
       setIsLoading(true);
+      console.log('🔄 Approbation de la propriété:', propertyId);
+      
       // Appel API pour approuver
-      console.log('Approbation de la propriété:', propertyId);
+      await AdminService.approveProperty(propertyId);
+      
       // Mettre à jour l'état local
       setProperties(prev => prev.map(p => 
-        p.id === propertyId ? { ...p, isApproved: true } : p
+        p.id === propertyId ? { ...p, is_approved: true } : p
       ));
+      
+      // Recharger les statistiques
+      const adminStats = await AdminService.getAdminStats();
+      setStats(adminStats);
+      
+      console.log('✅ Propriété approuvée avec succès');
     } catch (error) {
-      console.error('Erreur lors de l\'approbation:', error);
+      console.error('❌ Erreur lors de l\'approbation:', error);
+      alert('Erreur lors de l\'approbation de la propriété');
     } finally {
       setIsLoading(false);
     }
@@ -133,11 +125,21 @@ const AdminDashboardComplete: React.FC = () => {
   const handleRejectProperty = async (propertyId: string) => {
     try {
       setIsLoading(true);
+      const reason = prompt('Raison du rejet (optionnel):');
+      console.log('🔄 Rejet de la propriété:', propertyId);
+      
       // Appel API pour rejeter
-      console.log('Rejet de la propriété:', propertyId);
-      // Option: supprimer ou marquer comme rejetée
+      await AdminService.rejectProperty(propertyId, reason);
+      
+      // Mettre à jour l'état local
+      setProperties(prev => prev.map(p => 
+        p.id === propertyId ? { ...p, is_approved: false } : p
+      ));
+      
+      console.log('✅ Propriété rejetée avec succès');
     } catch (error) {
-      console.error('Erreur lors du rejet:', error);
+      console.error('❌ Erreur lors du rejet:', error);
+      alert('Erreur lors du rejet de la propriété');
     } finally {
       setIsLoading(false);
     }
@@ -147,11 +149,22 @@ const AdminDashboardComplete: React.FC = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette propriété ?')) {
       try {
         setIsLoading(true);
+        console.log('🔄 Suppression de la propriété:', propertyId);
+        
         // Appel API pour supprimer
-        console.log('Suppression de la propriété:', propertyId);
+        await AdminService.deleteProperty(propertyId);
+        
+        // Mettre à jour l'état local
         setProperties(prev => prev.filter(p => p.id !== propertyId));
+        
+        // Recharger les statistiques
+        const adminStats = await AdminService.getAdminStats();
+        setStats(adminStats);
+        
+        console.log('✅ Propriété supprimée avec succès');
       } catch (error) {
-        console.error('Erreur lors de la suppression:', error);
+        console.error('❌ Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression de la propriété');
       } finally {
         setIsLoading(false);
       }
@@ -162,12 +175,23 @@ const AdminDashboardComplete: React.FC = () => {
   const handleToggleUserStatus = async (userId: string) => {
     try {
       setIsLoading(true);
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      
+      console.log('🔄 Changement de statut utilisateur:', userId);
+      
       // Appel API pour changer le statut
+      await AdminService.toggleUserStatus(userId, !user.is_active);
+      
+      // Mettre à jour l'état local
       setUsers(prev => prev.map(u => 
-        u.id === userId ? { ...u, isActive: !u.isActive } : u
+        u.id === userId ? { ...u, is_active: !u.is_active } : u
       ));
+      
+      console.log('✅ Statut utilisateur modifié avec succès');
     } catch (error) {
-      console.error('Erreur lors du changement de statut:', error);
+      console.error('❌ Erreur lors du changement de statut:', error);
+      alert('Erreur lors du changement de statut utilisateur');
     } finally {
       setIsLoading(false);
     }
@@ -177,10 +201,22 @@ const AdminDashboardComplete: React.FC = () => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
         setIsLoading(true);
+        console.log('🔄 Suppression de l\'utilisateur:', userId);
+        
         // Appel API pour supprimer
+        await AdminService.deleteUser(userId);
+        
+        // Mettre à jour l'état local
         setUsers(prev => prev.filter(u => u.id !== userId));
+        
+        // Recharger les statistiques
+        const adminStats = await AdminService.getAdminStats();
+        setStats(adminStats);
+        
+        console.log('✅ Utilisateur supprimé avec succès');
       } catch (error) {
-        console.error('Erreur lors de la suppression:', error);
+        console.error('❌ Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression de l\'utilisateur');
       } finally {
         setIsLoading(false);
       }
@@ -191,12 +227,20 @@ const AdminDashboardComplete: React.FC = () => {
   const handlePublishContent = async (contentId: string) => {
     try {
       setIsLoading(true);
+      console.log('🔄 Publication du contenu:', contentId);
+      
       // Appel API pour publier
+      await AdminService.publishContent(contentId);
+      
+      // Mettre à jour l'état local
       setContentItems(prev => prev.map(c => 
         c.id === contentId ? { ...c, status: 'published' } : c
       ));
+      
+      console.log('✅ Contenu publié avec succès');
     } catch (error) {
-      console.error('Erreur lors de la publication:', error);
+      console.error('❌ Erreur lors de la publication:', error);
+      alert('Erreur lors de la publication du contenu');
     } finally {
       setIsLoading(false);
     }
@@ -205,21 +249,49 @@ const AdminDashboardComplete: React.FC = () => {
   const handleArchiveContent = async (contentId: string) => {
     try {
       setIsLoading(true);
+      console.log('🔄 Archivage du contenu:', contentId);
+      
       // Appel API pour archiver
+      await AdminService.archiveContent(contentId);
+      
+      // Mettre à jour l'état local
       setContentItems(prev => prev.map(c => 
         c.id === contentId ? { ...c, status: 'archived' } : c
       ));
+      
+      console.log('✅ Contenu archivé avec succès');
     } catch (error) {
-      console.error('Erreur lors de l\'archivage:', error);
+      console.error('❌ Erreur lors de l\'archivage:', error);
+      alert('Erreur lors de l\'archivage du contenu');
     } finally {
       setIsLoading(false);
     }
   };
 
   // Export des données
-  const handleExportData = (type: string) => {
-    console.log(`Export des données: ${type}`);
-    // Logique d'export
+  const handleExportData = async (type: 'users' | 'properties' | 'bookings' | 'content') => {
+    try {
+      setIsLoading(true);
+      console.log(`🔄 Export des données: ${type}`);
+      
+      const data = await AdminService.exportData(type, 'csv');
+      
+      // Créer et télécharger le fichier
+      const blob = new Blob([data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${type}_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      
+      console.log('✅ Export réussi');
+    } catch (error) {
+      console.error('❌ Erreur lors de l\'export:', error);
+      alert('Erreur lors de l\'export des données');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Filtrage et recherche
@@ -227,8 +299,8 @@ const AdminDashboardComplete: React.FC = () => {
     const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.location.city.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || 
-                         (filterStatus === 'pending' && !property.isApproved) ||
-                         (filterStatus === 'approved' && property.isApproved);
+                         (filterStatus === 'pending' && !property.is_approved) ||
+                         (filterStatus === 'approved' && property.is_approved);
     return matchesSearch && matchesFilter;
   });
 
@@ -272,8 +344,8 @@ const AdminDashboardComplete: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Utilisateurs</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalUsers}</p>
-              <p className="text-xs text-green-600">+{stats.activeUsers} actifs</p>
+              <p className="text-2xl font-bold text-gray-900">{calculatedStats.totalUsers}</p>
+              <p className="text-xs text-green-600">+{calculatedStats.activeUsers} actifs</p>
             </div>
           </div>
         </div>
@@ -285,8 +357,8 @@ const AdminDashboardComplete: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Propriétés</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalProperties}</p>
-              <p className="text-xs text-orange-600">{stats.pendingProperties} en attente</p>
+              <p className="text-2xl font-bold text-gray-900">{calculatedStats.totalProperties}</p>
+              <p className="text-xs text-orange-600">{calculatedStats.pendingProperties} en attente</p>
             </div>
           </div>
         </div>
@@ -298,8 +370,8 @@ const AdminDashboardComplete: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Réservations</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalBookings}</p>
-              <p className="text-xs text-blue-600">{stats.pendingBookings} en attente</p>
+              <p className="text-2xl font-bold text-gray-900">{calculatedStats.totalBookings}</p>
+              <p className="text-xs text-blue-600">{calculatedStats.pendingBookings} en attente</p>
             </div>
           </div>
         </div>
@@ -311,7 +383,7 @@ const AdminDashboardComplete: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Revenus</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalRevenue.toLocaleString()} MAD</p>
+              <p className="text-2xl font-bold text-gray-900">{calculatedStats.totalRevenue.toLocaleString()} MAD</p>
               <p className="text-xs text-green-600">Commission 15%</p>
             </div>
           </div>
@@ -353,36 +425,60 @@ const AdminDashboardComplete: React.FC = () => {
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Activité récente</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                      <span className="text-sm">Nouvelle réservation confirmée</span>
-                      <span className="text-xs text-gray-500">Il y a 2h</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                      <span className="text-sm">Nouvel utilisateur inscrit</span>
-                      <span className="text-xs text-gray-500">Il y a 4h</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                      <span className="text-sm">Bien en attente d'approbation</span>
-                      <span className="text-xs text-gray-500">Il y a 6h</span>
-                    </div>
+                    {stats?.recentActivity?.slice(0, 3).map((activity, index) => (
+                      <div key={index} className={`flex items-center justify-between p-3 rounded-lg ${
+                        activity.type === 'booking' ? 'bg-green-50' :
+                        activity.type === 'user' ? 'bg-blue-50' :
+                        'bg-yellow-50'
+                      }`}>
+                        <span className="text-sm">{activity.description}</span>
+                        <span className="text-xs text-gray-500">
+                          {new Date(activity.timestamp).toLocaleString()}
+                        </span>
+                      </div>
+                    )) || (
+                      <>
+                        <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                          <span className="text-sm">Nouvelle réservation confirmée</span>
+                          <span className="text-xs text-gray-500">Il y a 2h</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                          <span className="text-sm">Nouvel utilisateur inscrit</span>
+                          <span className="text-xs text-gray-500">Il y a 4h</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                          <span className="text-sm">Bien en attente d'approbation</span>
+                          <span className="text-xs text-gray-500">Il y a 6h</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Villes populaires</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium">Marrakech</span>
-                      <span className="text-sm text-gray-600">2 biens</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium">Fès</span>
-                      <span className="text-sm text-gray-600">1 bien</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-sm font-medium">Casablanca</span>
-                      <span className="text-sm text-gray-600">1 bien</span>
-                    </div>
+                    {stats?.cityDistribution?.slice(0, 5).map((city, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm font-medium">{city.city}</span>
+                        <span className="text-sm text-gray-600">{city.count} biens</span>
+                      </div>
+                    )) || (
+                      <>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <span className="text-sm font-medium">Marrakech</span>
+                          <span className="text-sm text-gray-600">2 biens</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <span className="text-sm font-medium">Fès</span>
+                          <span className="text-sm text-gray-600">1 bien</span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <span className="text-sm font-medium">Casablanca</span>
+                          <span className="text-sm text-gray-600">1 bien</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -467,7 +563,7 @@ const AdminDashboardComplete: React.FC = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{user.createdAt}</div>
+                          <div className="text-sm text-gray-900">{new Date(user.created_at).toLocaleDateString()}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
@@ -538,9 +634,9 @@ const AdminDashboardComplete: React.FC = () => {
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className={`px-2 py-1 text-xs rounded-full ${
-                          property.isApproved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                          property.is_approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {property.isApproved ? 'Approuvé' : 'En attente'}
+                          {property.is_approved ? 'Approuvé' : 'En attente'}
                         </span>
                         <span className="text-sm text-gray-500">{property.location.city}</span>
                       </div>
@@ -563,7 +659,7 @@ const AdminDashboardComplete: React.FC = () => {
                         <button className="text-orange-600 hover:text-orange-900 p-2 rounded-lg hover:bg-orange-50">
                           <Edit className="h-4 w-4" />
                         </button>
-                        {!property.isApproved && (
+                                                 {!property.is_approved && (
                           <button
                             onClick={() => handleApproveProperty(property.id)}
                             className="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50"
@@ -615,14 +711,14 @@ const AdminDashboardComplete: React.FC = () => {
                       <tr key={booking.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">#{booking.id.slice(0, 8)}</div>
-                          <div className="text-sm text-gray-500">{booking.totalPrice} MAD</div>
+                          <div className="text-sm text-gray-500">{booking.total_price} MAD</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">Propriété {booking.propertyId.slice(0, 8)}</div>
+                          <div className="text-sm text-gray-900">Propriété {booking.property_id.slice(0, 8)}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{booking.checkIn}</div>
-                          <div className="text-sm text-gray-500">→ {booking.checkOut}</div>
+                          <div className="text-sm text-gray-900">{new Date(booking.check_in).toLocaleDateString()}</div>
+                          <div className="text-sm text-gray-500">→ {new Date(booking.check_out).toLocaleDateString()}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -682,11 +778,11 @@ const AdminDashboardComplete: React.FC = () => {
                       <span className="text-xs text-gray-500">{item.type}</span>
                     </div>
                     <h4 className="font-semibold text-lg mb-2">{item.title}</h4>
-                    <p className="text-sm text-gray-600 mb-3">Par {item.author}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                      <span>Créé: {item.createdAt}</span>
-                      <span>Modifié: {item.updatedAt}</span>
-                    </div>
+                                         <p className="text-sm text-gray-600 mb-3">Par {item.author_name || 'Inconnu'}</p>
+                                         <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                       <span>Créé: {new Date(item.created_at).toLocaleDateString()}</span>
+                       <span>Modifié: {new Date(item.updated_at).toLocaleDateString()}</span>
+                     </div>
                     <div className="flex space-x-2">
                       <button className="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50">
                         <Eye className="h-4 w-4" />
@@ -722,7 +818,7 @@ const AdminDashboardComplete: React.FC = () => {
             <div>
               <h3 className="text-lg font-semibold mb-6">Biens en attente d'approbation</h3>
               <div className="space-y-6">
-                {properties.filter(p => !p.isApproved).map((property) => (
+                {properties.filter(p => !p.is_approved).map((property) => (
                   <div key={property.id} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <div className="flex items-start space-x-4">
                       <img
@@ -768,7 +864,7 @@ const AdminDashboardComplete: React.FC = () => {
                 <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-6 text-white">
                   <h4 className="text-lg font-semibold mb-2">Revenus ce mois</h4>
                   <p className="text-3xl font-bold">
-                    {(stats.totalRevenue * 0.3).toLocaleString()} MAD
+                    {(calculatedStats.totalRevenue * 0.3).toLocaleString()} MAD
                   </p>
                   <p className="text-blue-100 text-sm mt-1">Commission de 15%</p>
                 </div>
