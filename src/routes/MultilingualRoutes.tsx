@@ -21,6 +21,7 @@ import ProfilePage from '../pages/ProfilePage';
 import BlogPage from '../pages/BlogPage';
 import BlogDetailPage from '../pages/BlogDetailPage';
 import TravelGuidePage from '../pages/TravelGuidePage';
+import AdminDashboard from '../components/Dashboard/AdminDashboard';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useApp();
@@ -113,6 +114,16 @@ const MultilingualRoutes: React.FC<MultilingualRoutesProps> = ({ onPropertySelec
         element={
           <RoleProtectedRoute allowedRoles={['client']}>
             <ClientDashboardPage />
+          </RoleProtectedRoute>
+        } 
+      />
+      
+      {/* Routes protégées - Admin */}
+      <Route 
+        path="/admin/dashboard" 
+        element={
+          <RoleProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
           </RoleProtectedRoute>
         } 
       />
