@@ -8,20 +8,20 @@ const FrenchRedirect: React.FC = () => {
   useEffect(() => {
     const pathname = location.pathname;
     
-    // Cas 1: Redirection de la page d'accueil / vers /fr
-    if (pathname === '/') {
-      console.log('🔄 Redirection page d\'accueil: / → /fr');
-      navigate('/fr', { replace: true });
+    // Cas 1: Redirection de la page d'accueil /fr vers /
+    if (pathname === '/fr') {
+      console.log('🔄 Redirection page d\'accueil: /fr → /');
+      navigate('/', { replace: true });
       return;
     }
     
-    // Cas 2: Vérifier si l'URL commence par /fr
-    if (pathname.startsWith('/fr')) {
+    // Cas 2: Vérifier si l'URL commence par /fr (sous-pages)
+    if (pathname.startsWith('/fr/')) {
       // Extraire le chemin sans /fr
       const newPath = pathname.replace(/^\/fr/, '');
       
       // Redirection permanente (301) vers la nouvelle URL
-      console.log(`🔄 Redirection permanente: ${pathname} → ${newPath}`);
+      console.log(`🔄 Redirection sous-page: ${pathname} → ${newPath}`);
       
       // Rediriger vers la nouvelle URL
       navigate(newPath, { replace: true });
