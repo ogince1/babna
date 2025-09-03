@@ -5,9 +5,9 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIU
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    autoRefreshToken: true,     // ✅ Activer le refresh automatique des tokens
-    persistSession: true,       // ✅ Activer la persistance de session
-    detectSessionInUrl: true    // ✅ Activer la détection de session dans l'URL
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false
   }
 });
 
