@@ -89,69 +89,6 @@ export interface AdminStats {
 // Service principal pour l'administration
 export class AdminService {
   
-  // ===== TEST DE CONNEXION =====
-  
-  /**
-   * Tester la connexion à Supabase et vérifier les tables
-   */
-  static async testConnection(): Promise<{ success: boolean; message: string; tables: string[] }> {
-    try {
-      console.log('🧪 Test de connexion Supabase...');
-      
-      // Test 1: Vérifier la connexion
-      const { data: testData, error: testError } = await supabase
-        .from('properties')
-        .select('id', { count: 'exact', head: true });
-      
-      if (testError) {
-        console.error('❌ Erreur de connexion:', testError);
-        return {
-          success: false,
-          message: `Erreur de connexion: ${testError.message}`,
-          tables: []
-        };
-      }
-      
-      // Test 2: Compter les propriétés
-      const { count: propertiesCount } = await supabase
-        .from('properties')
-        .select('*', { count: 'exact', head: true });
-      
-      // Test 3: Compter les utilisateurs
-      const { count: usersCount } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true });
-      
-      // Test 4: Compter les réservations
-      const { count: bookingsCount } = await supabase
-        .from('bookings')
-        .select('*', { count: 'exact', head: true });
-      
-      console.log('✅ Connexion réussie:', {
-        properties: propertiesCount || 0,
-        users: usersCount || 0,
-        bookings: bookingsCount || 0
-      });
-      
-      return {
-        success: true,
-        message: 'Connexion réussie',
-        tables: [
-          `properties: ${propertiesCount || 0}`,
-          `users: ${usersCount || 0}`,
-          `bookings: ${bookingsCount || 0}`
-        ]
-      };
-    } catch (error) {
-      console.error('❌ Erreur lors du test de connexion:', error);
-      return {
-        success: false,
-        message: `Erreur: ${error}`,
-        tables: []
-      };
-    }
-  }
-  
   // ===== GESTION DES UTILISATEURS =====
   
   /**
@@ -253,12 +190,12 @@ export class AdminService {
    */
   static async getProperties(page: number = 1, limit: number = 20, search?: string, filterStatus?: string): Promise<{ properties: AdminProperty[]; total: number }> {
     try {
-      console.log('🔄 Récupération des propriétés...');
-      
-      // Requête simplifiée d'abord
       let query = supabase
         .from('properties')
-        .select('*', { count: 'exact' });
+        .select(`
+          *,
+          users!properties_owner_id_fkey(name, email)
+        `, { count: 'exact' });
       
       // Recherche par titre ou ville
       if (search) {
@@ -280,64 +217,24 @@ export class AdminService {
         .range(from, to)
         .order('created_at', { ascending: false });
       
-      if (error) {
-        console.error('❌ Erreur Supabase:', error);
-        throw error;
-      }
+      if (error) throw error;
       
-      console.log('📊 Données reçues:', data?.length || 0, 'propriétés');
-      
-      // Transformer les données avec gestion d'erreur
-      const properties = (data || []).map(property => {
-        try {
-          return {
-            ...property,
-            // Gestion sécurisée des champs JSON
-            location: typeof property.location === 'string' ? 
-              JSON.parse(property.location) : 
-              property.location || { city: 'Inconnue', address: 'Non spécifiée' },
-            amenities: typeof property.amenities === 'string' ? 
-              JSON.parse(property.amenities) : 
-              property.amenities || [],
-            // Valeurs par défaut pour éviter les erreurs
-            images: property.images || [],
-            bedrooms: property.bedrooms || 0,
-            bathrooms: property.bathrooms || 0,
-            max_guests: property.max_guests || 0,
-            price: property.price || 0,
-            is_approved: property.is_approved || false,
-            is_available: property.is_available !== false
-          };
-        } catch (parseError) {
-          console.warn('⚠️ Erreur de parsing pour la propriété:', property.id, parseError);
-          return {
-            ...property,
-            location: { city: 'Erreur', address: 'Erreur' },
-            amenities: [],
-            images: [],
-            bedrooms: 0,
-            bathrooms: 0,
-            max_guests: 0,
-            price: 0,
-            is_approved: false,
-            is_available: false
-          };
-        }
-      });
-      
-      console.log('✅ Propriétés transformées:', properties.length);
+      // Transformer les données
+      const properties = (data || []).map(property => ({
+        ...property,
+        owner_name: property.users?.name,
+        owner_email: property.users?.email,
+        location: typeof property.location === 'string' ? JSON.parse(property.location) : property.location,
+        amenities: typeof property.amenities === 'string' ? JSON.parse(property.amenities) : property.amenities
+      }));
       
       return {
         properties,
         total: count || 0
       };
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des propriétés:', error);
-      // Retourner un tableau vide en cas d'erreur
-      return {
-        properties: [],
-        total: 0
-      };
+      console.error('Erreur lors de la récupération des propriétés:', error);
+      throw error;
     }
   }
   
