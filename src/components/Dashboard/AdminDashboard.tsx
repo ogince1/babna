@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
-import { Users, Home, TrendingUp, Check, X, Eye } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Users, Home, TrendingUp, Check, X, Eye, 
+  FileText, MessageSquare, MapPin, Settings,
+  Plus, Edit, Trash2, Calendar, DollarSign,
+  BarChart3, UserCheck, Building2, Globe
+} from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { t } from '../../utils/i18n';
-import { properties, users, bookings } from '../../data/mockData';
+import { supabase } from '../../lib/supabase';
 
 const AdminDashboard: React.FC = () => {
   const { language } = useApp();
   const [activeTab, setActiveTab] = useState('overview');
+  const [loading, setLoading] = useState(true);
+  
+  // États des données
+  const [users, setUsers] = useState([]);
+  const [properties, setProperties] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [travelGuides, setTravelGuides] = useState([]);
 
+  // Stats calculées
   const stats = {
     totalUsers: users.length,
     totalProperties: properties.length,
     totalBookings: bookings.length,
-    totalRevenue: bookings.reduce((sum, booking) => sum + (booking.totalPrice * 0.15), 0),
-    pendingProperties: properties.filter(p => !p.isApproved).length
+    totalRevenue: bookings.reduce((sum: number, booking: any) => sum + (booking.totalPrice * 0.15), 0),
+    pendingProperties: properties.filter((p: any) => !p.is_approved).length,
+    totalBlogPosts: blogPosts.length,
+    totalFaqs: faqs.length,
+    totalTestimonials: testimonials.length,
+    totalTravelGuides: travelGuides.length
   };
 
   const tabs = [
@@ -21,7 +41,11 @@ const AdminDashboard: React.FC = () => {
     { id: 'users', label: t('users', language), icon: Users },
     { id: 'properties', label: 'Biens immobiliers', icon: Home },
     { id: 'approvals', label: t('pendingApprovals', language), icon: Check },
-    { id: 'statistics', label: t('statistics', language), icon: TrendingUp }
+    { id: 'blog', label: 'Blog & Articles', icon: FileText },
+    { id: 'faq', label: 'FAQ', icon: MessageSquare },
+    { id: 'testimonials', label: 'Témoignages', icon: UserCheck },
+    { id: 'travel-guides', label: 'Guides de voyage', icon: MapPin },
+    { id: 'statistics', label: t('statistics', language), icon: BarChart3 }
   ];
 
   const handleApproveProperty = (propertyId: string) => {
