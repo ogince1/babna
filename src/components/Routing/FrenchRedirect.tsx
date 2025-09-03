@@ -8,7 +8,14 @@ const FrenchRedirect: React.FC = () => {
   useEffect(() => {
     const pathname = location.pathname;
     
-    // Vérifier si l'URL commence par /fr
+    // Cas 1: Redirection de la page d'accueil / vers /fr
+    if (pathname === '/') {
+      console.log('🔄 Redirection page d\'accueil: / → /fr');
+      navigate('/fr', { replace: true });
+      return;
+    }
+    
+    // Cas 2: Vérifier si l'URL commence par /fr
     if (pathname.startsWith('/fr')) {
       // Extraire le chemin sans /fr
       const newPath = pathname.replace(/^\/fr/, '');
